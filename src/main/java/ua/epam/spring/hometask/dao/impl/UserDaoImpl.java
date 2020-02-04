@@ -1,9 +1,10 @@
-package ua.epam.spring.hometask.dao;
+package ua.epam.spring.hometask.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.User;
-import ua.epam.spring.hometask.exceptions.UserNotFoundException;
+import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
@@ -18,11 +19,11 @@ public class UserDaoImpl implements UserDao {
     private Store store;
 
     @Override
-    public User getByUserByEmail(@Nonnull String userEmail) {
+    public User getUserByEmail(@Nonnull String userEmail) {
         Optional<User> foundUser = store.getUserMap().values().stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(userEmail))
                 .findAny();
-        return foundUser.orElseThrow(() -> new UserNotFoundException("User not found by email" + userEmail));
+        return foundUser.orElseThrow(() -> new ItemNotFoundException("User not found by email" + userEmail));
     }
 
     @Override
@@ -30,19 +31,18 @@ public class UserDaoImpl implements UserDao {
         long uniqueID = Long.valueOf(UUID.randomUUID().toString());
         store.getUserMap().put(uniqueID, object);
         return store.getUserMap().get(uniqueID);
-
     }
 
     @Override
     public void remove(@Nonnull User object) {
         Optional.ofNullable(store.getUserMap().remove(object.getId()))
-        .orElseThrow(()-> new UserNotFoundException("User not found: " + object));
+                .orElseThrow(() -> new ItemNotFoundException("User not found: " + object));
     }
 
     @Override
     public User getById(@Nonnull Long id) {
         return Optional.of(store.getUserMap().get(id))
-                .orElseThrow(() -> new UserNotFoundException("User not found by id: " + id));
+                .orElseThrow(() -> new ItemNotFoundException("User not found by id: " + id));
     }
 
     @Nonnull

@@ -6,5 +6,5 @@ import javax.annotation.Nonnull;
 
 public interface UserDao extends BaseDao<User> {
 
-    User getByUserByEmail(@Nonnull String userEmail);
+    User getUserByEmail(@Nonnull String userEmail);
 }
