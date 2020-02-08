@@ -1,4 +1,4 @@
-package ua.epam.spring.hometask.service;
+package ua.epam.spring.hometask.dao;
 
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
@@ -6,13 +6,13 @@ import ua.epam.spring.hometask.domain.User;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
-/**
- * @author Yuriy_Tkach
- */
-public interface BookingService {
+public interface TicketDao extends BaseDao<Ticket> {
 
     /**
      * Getting price when buying all supplied seats for particular event
@@ -26,7 +26,7 @@ public interface BookingService {
      * @return total price
      */
     double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
-                                  @Nonnull Set<Long> seats);
+                           @Nonnull Set<Long> seats);
 
     /**
      * Books tickets in internal system. If user is not
@@ -45,5 +45,4 @@ public interface BookingService {
      */
     @Nonnull
     Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime);
-
 }

@@ -9,6 +9,10 @@
 
     <context:property-placeholder location="/src/main/resources/auditorium.properties"/>
 
+    <bean id="bookingService" class="ua.epam.spring.hometask.service.impl.BookingServiceImpl">
+        <constructor-arg ref="ticketDao"/>
+    </bean>
+
     <bean id="eventService" class="ua.epam.spring.hometask.service.impl.EventServiceImpl">
         <constructor-arg ref="eventDao"/>
     </bean>
@@ -19,6 +23,10 @@
 
     <bean id="auditoriumService" class="ua.epam.spring.hometask.service.impl.AuditoriumServiceImpl">
         <constructor-arg ref="auditoriumDao"/>
+    </bean>
+
+    <bean id="ticketDao" class="ua.epam.spring.hometask.dao.impl.TicketDaoImpl">
+        <constructor-arg ref="store"/>
     </bean>
 
     <bean id="eventDao" class="ua.epam.spring.hometask.dao.impl.EventDaoImpl">
