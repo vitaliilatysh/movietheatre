@@ -6,21 +6,30 @@ import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 public class AuditoriumDaoImpl implements AuditoriumDao {
 
     private Store store;
-    private Auditorium auditorium;
+    private List<String> names;
+    private List<Long> seats;
+    private List<Long> vipSeats;
 
-    public AuditoriumDaoImpl(Store store, Auditorium auditorium) {
-        this.auditorium = auditorium;
+    public AuditoriumDaoImpl(Store store) {
         this.store = store;
     }
 
     public void init() {
-        store.getAuditoriumMap().put(1L, auditorium);
+        for (int i = 1; i < names.size(); i++) {
+            Auditorium auditorium = new Auditorium();
+            auditorium.setId((long) i);
+            auditorium.setName(names.get(i));
+            auditorium.setNumberOfSeats(seats.get(i));
+            auditorium.setVipSeats(new HashSet<>(Collections.singletonList(vipSeats.get(i))));
+
+            store.getAuditoriumMap().put((long) i, auditorium);
+        }
+
     }
 
     @Override
@@ -33,24 +42,46 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
 
     @Override
     public Auditorium save(@Nonnull Auditorium object) {
-        //not supported
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void remove(@Nonnull Auditorium object) {
-        //not supported
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Auditorium getById(@Nonnull Long id) {
-        //not supported
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Nonnull
     @Override
     public Collection<Auditorium> getAll() {
         return store.getAuditoriumMap().values();
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public void setNames(List<String> names) {
+        this.names = names;
+    }
+
+    public List<Long> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Long> seats) {
+        this.seats = seats;
+    }
+
+    public List<Long> getVipSeats() {
+        return vipSeats;
+    }
+
+    public void setVipSeats(List<Long> vipSeats) {
+        this.vipSeats = vipSeats;
     }
 }

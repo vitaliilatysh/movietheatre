@@ -39,14 +39,11 @@
 
     <bean id="auditoriumDao" class="ua.epam.spring.hometask.dao.impl.AuditoriumDaoImpl" init-method="init">
         <constructor-arg ref="store"/>
-        <constructor-arg ref="auditorium"/>
+        <property name="names" value="#{'${auditorium.name}'.split(',')}"/>
+        <property name="seats" value="#{'${auditorium.seats}'.split(',')}"/>
+        <property name="vipSeats" value="#{'${auditorium.seats.vip}'.split(',')}"/>
     </bean>
 
     <bean id="store" class="ua.epam.spring.hometask.storage.Store"/>
 
-    <bean id="auditorium" class="ua.epam.spring.hometask.domain.Auditorium">
-        <property name="name" value="${auditorium.name}"/>
-        <property name="numberOfSeats" value="${auditorium.seats}"/>
-        <property name="vipSeats" value="${auditorium.seats.vip}"/>
-    </bean>
 </beans>
