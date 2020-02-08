@@ -9,7 +9,6 @@ import ua.epam.spring.hometask.storage.Store;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,26 +44,5 @@ public class TicketDaoImpl implements TicketDao {
         return store.getTicketMap().values().stream()
                 .filter(ticket -> ticket.getEvent().getId().equals(event.getId()) && ticket.getDateTime().equals(dateTime))
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public Ticket save(@Nonnull Ticket object) {
-        return null;
-    }
-
-    @Override
-    public void remove(@Nonnull Ticket object) {
-
-    }
-
-    @Override
-    public Ticket getById(@Nonnull Long id) {
-        return null;
-    }
-
-    @Nonnull
-    @Override
-    public Collection<Ticket> getAll() {
-        return null;
     }
 }

@@ -6,13 +6,10 @@ import ua.epam.spring.hometask.domain.User;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
-public interface TicketDao extends BaseDao<Ticket> {
+public interface TicketDao {
 
     /**
      * Getting price when buying all supplied seats for particular event

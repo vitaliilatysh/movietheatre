@@ -10,7 +10,10 @@ import java.time.LocalDateTime;
 public class EveryNTicketStrategy implements DiscountStrategy {
 
     @Override
-    public byte count(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
+    public byte count(@Nullable User user,
+                      @Nonnull Event event,
+                      @Nonnull LocalDateTime airDateTime,
+                      long numberOfTickets) {
         return 0;
     }
 }
