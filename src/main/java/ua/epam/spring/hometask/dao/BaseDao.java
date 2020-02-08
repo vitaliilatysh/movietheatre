@@ -8,8 +8,7 @@ public interface BaseDao<T> {
     /**
      * Saving new object to storage or updating existing one
      *
-     * @param object
-     *            Object to save
+     * @param object Object to save
      * @return saved object with assigned id
      */
     T save(@Nonnull T object);
@@ -17,16 +16,14 @@ public interface BaseDao<T> {
     /**
      * Removing object from storage
      *
-     * @param object
-     *            Object to remove
+     * @param object Object to remove
      */
     void remove(@Nonnull T object);
 
     /**
      * Getting object by id from storage
      *
-     * @param id
-     *            id of the object
+     * @param id id of the object
      * @return Found object or <code>null</code>
      */
     T getById(@Nonnull Long id);

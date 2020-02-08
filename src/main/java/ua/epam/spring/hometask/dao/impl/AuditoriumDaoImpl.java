@@ -1,26 +1,26 @@
 package ua.epam.spring.hometask.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository
 public class AuditoriumDaoImpl implements AuditoriumDao {
 
-    @Autowired
     private Store store;
+    private Auditorium auditorium;
 
-    @PostConstruct
-    private void init() {
-        //read properties file and save it to store
+    public AuditoriumDaoImpl(Store store, Auditorium auditorium) {
+        this.auditorium = auditorium;
+        this.store = store;
+    }
+
+    public void init() {
+        store.getAuditoriumMap().put(1L, auditorium);
     }
 
     @Override

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:property-placeholder location="/src/main/resources/auditorium.properties"/>
+
+    <bean id="eventService" class="ua.epam.spring.hometask.service.impl.EventServiceImpl">
+        <constructor-arg ref="eventDao"/>
+    </bean>
+
+    <bean id="userService" class="ua.epam.spring.hometask.service.impl.UserServiceImpl">
+        <constructor-arg ref="userDao"/>
+    </bean>
+
+    <bean id="auditoriumService" class="ua.epam.spring.hometask.service.impl.AuditoriumServiceImpl">
+        <constructor-arg ref="auditoriumDao"/>
+    </bean>
+
+    <bean id="eventDao" class="ua.epam.spring.hometask.dao.impl.EventDaoImpl">
+        <constructor-arg ref="store"/>
+    </bean>
+
+    <bean id="userDao" class="ua.epam.spring.hometask.dao.impl.UserDaoImpl">
+        <constructor-arg ref="store"/>
+    </bean>
+
+    <bean id="auditoriumDao" class="ua.epam.spring.hometask.dao.impl.AuditoriumDaoImpl" init-method="init">
+        <constructor-arg ref="store"/>
+        <constructor-arg ref="auditorium"/>
+    </bean>
+
+    <bean id="store" class="ua.epam.spring.hometask.storage.Store"/>
+
+    <bean id="auditorium" class="ua.epam.spring.hometask.domain.Auditorium">
+        <property name="name" value="${auditorium.name}"/>
+        <property name="numberOfSeats" value="${auditorium.seats}"/>
+        <property name="vipSeats" value="${auditorium.seats.vip}"/>
+    </bean>
+</beans>
