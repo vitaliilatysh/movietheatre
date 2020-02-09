@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class Store {
     private static Store instance;
-    private Map<Long, User> userMap;
-    private Map<Long, Ticket> ticketMap;
-    private Map<Long, Event> eventMap;
-    private Map<Long, Auditorium> auditoriumMap;
+    private Map<String, User> userMap;
+    private Map<String, Ticket> ticketMap;
+    private Map<String, Event> eventMap;
+    private Map<String, Auditorium> auditoriumMap;
 
     private Store() {
         this.userMap = new HashMap<>();
@@ -33,19 +33,19 @@ public class Store {
         return instance;
     }
 
-    public Map<Long, User> getUserMap() {
+    public Map<String, User> getUserMap() {
         return userMap;
     }
 
-    public Map<Long, Ticket> getTicketMap() {
+    public Map<String, Ticket> getTicketMap() {
         return ticketMap;
     }
 
-    public Map<Long, Auditorium> getAuditoriumMap() {
+    public Map<String, Auditorium> getAuditoriumMap() {
         return auditoriumMap;
     }
 
-    public Map<Long, Event> getEventMap() {
+    public Map<String, Event> getEventMap() {
         return eventMap;
     }
 }

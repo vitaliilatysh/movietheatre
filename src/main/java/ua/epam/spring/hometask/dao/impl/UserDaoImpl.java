@@ -2,6 +2,7 @@ package ua.epam.spring.hometask.dao.impl;
 
 import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.storage.Store;
 
@@ -28,21 +29,37 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User save(@Nonnull User object) {
-        long uniqueID = Long.valueOf(UUID.randomUUID().toString());
+        Optional<User> foundUser = store.getUserMap().values().stream()
+                .filter(user -> user.getEmail().equalsIgnoreCase(object.getEmail()))
+                .findAny();
+        if (foundUser.isPresent()) {
+            throw new ItemAlreadyExistException("User already registered with such email " + object.getEmail());
+        }
+
+        String uniqueID = UUID.randomUUID().toString();
+        object.setId(uniqueID);
+
         store.getUserMap().put(uniqueID, object);
         return store.getUserMap().get(uniqueID);
     }
 
     @Override
     public void remove(@Nonnull User object) {
-        Optional.ofNullable(store.getUserMap().remove(object.getId()))
-                .orElseThrow(() -> new ItemNotFoundException("User not found: " + object));
+        String userId = object.getId();
+        User foundUser = store.getUserMap().get(userId);
+        if (foundUser == null) {
+            throw new ItemNotFoundException("User not found by id: " + userId);
+        }
+        store.getUserMap().remove(userId);
     }
 
     @Override
-    public User getById(@Nonnull Long id) {
-        return Optional.of(store.getUserMap().get(id))
-                .orElseThrow(() -> new ItemNotFoundException("User not found by id: " + id));
+    public User getById(@Nonnull String id) {
+        User foundUser = store.getUserMap().get(id);
+        if (foundUser == null) {
+            throw new ItemNotFoundException("User not found by id: " + id);
+        }
+        return foundUser;
     }
 
     @Nonnull

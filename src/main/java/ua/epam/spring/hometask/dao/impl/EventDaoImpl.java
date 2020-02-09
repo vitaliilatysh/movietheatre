@@ -39,7 +39,7 @@ public class EventDaoImpl implements EventDao {
 
     @Override
     public Event save(@Nonnull Event object) {
-        long uniqueID = Long.valueOf(UUID.randomUUID().toString());
+        String uniqueID = UUID.randomUUID().toString();
         store.getEventMap().put(uniqueID, object);
         return store.getEventMap().get(uniqueID);
     }
@@ -51,7 +51,7 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
-    public Event getById(@Nonnull Long id) {
+    public Event getById(@Nonnull String id) {
         return Optional.of(store.getEventMap().get(id))
                 .orElseThrow(() -> new ItemNotFoundException("Event not found by id: " + id));
     }

@@ -26,7 +26,7 @@ public interface BaseDao<T> {
      * @param id id of the object
      * @return Found object or <code>null</code>
      */
-    T getById(@Nonnull Long id);
+    T getById(@Nonnull String id);
 
     /**
      * Getting all objects from storage

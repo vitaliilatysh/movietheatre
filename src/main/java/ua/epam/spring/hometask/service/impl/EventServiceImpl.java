@@ -33,7 +33,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event getById(@Nonnull Long id) {
+    public Event getById(@Nonnull String id) {
         return null;
     }
 

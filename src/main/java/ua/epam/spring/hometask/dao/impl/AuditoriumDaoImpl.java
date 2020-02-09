@@ -20,14 +20,15 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
     }
 
     public void init() {
-        for (int i = 1; i < names.size(); i++) {
+        for (int i = 0; i < names.size(); i++) {
+            String uniqueID = UUID.randomUUID().toString();
             Auditorium auditorium = new Auditorium();
-            auditorium.setId((long) i);
+            auditorium.setId(uniqueID);
             auditorium.setName(names.get(i));
             auditorium.setNumberOfSeats(seats.get(i));
             auditorium.setVipSeats(new HashSet<>(Collections.singletonList(vipSeats.get(i))));
 
-            store.getAuditoriumMap().put((long) i, auditorium);
+            store.getAuditoriumMap().put(uniqueID, auditorium);
         }
 
     }
@@ -51,7 +52,7 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
     }
 
     @Override
-    public Auditorium getById(@Nonnull Long id) {
+    public Auditorium getById(@Nonnull String id) {
         throw new UnsupportedOperationException();
     }
 
