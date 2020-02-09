@@ -4,8 +4,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import ua.epam.spring.hometask.BaseTest;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
@@ -18,7 +17,7 @@ import java.time.Month;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class UserServiceImplTest {
+public class UserServiceImplTest extends BaseTest {
 
     private static UserService userService;
     private static User user1;
@@ -30,9 +29,6 @@ public class UserServiceImplTest {
 
     @BeforeClass
     public static void setUp() {
-        ApplicationContext context = new FileSystemXmlApplicationContext(
-                "/src/main/resources/config/application-context.xml",
-                "/src/main/resources/config/strategies-context.xml");
         userService = (UserService) context.getBean("userService");
         store = (Store) context.getBean("store");
 

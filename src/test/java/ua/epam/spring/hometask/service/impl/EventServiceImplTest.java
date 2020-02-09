@@ -4,8 +4,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import ua.epam.spring.hometask.BaseTest;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.EventRating;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
@@ -19,7 +18,7 @@ import java.util.TreeSet;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class EventServiceImplTest {
+public class EventServiceImplTest extends BaseTest {
 
     private static EventService eventService;
     private static Event event1;
@@ -31,9 +30,6 @@ public class EventServiceImplTest {
 
     @BeforeClass
     public static void setUp() {
-        ApplicationContext context = new FileSystemXmlApplicationContext(
-                "/src/main/resources/config/application-context.xml",
-                "/src/main/resources/config/strategies-context.xml");
         eventService = (EventService) context.getBean("eventService");
         store = (Store) context.getBean("store");
 
