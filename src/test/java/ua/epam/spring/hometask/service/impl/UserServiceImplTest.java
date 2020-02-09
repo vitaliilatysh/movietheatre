@@ -1,9 +1,7 @@
 package ua.epam.spring.hometask.service.impl;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +24,9 @@ public class UserServiceImplTest {
     private static User user1;
     private static User user2;
     private static Store store;
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @BeforeClass
     public static void setUp() {
@@ -63,16 +64,44 @@ public class UserServiceImplTest {
         assertEquals(user2, userService.save(user2));
     }
 
-    @Test(expected = ItemAlreadyExistException.class)
+
+    @Test
+    public void shouldReturnByEmail() {
+        assertEquals(user1, userService.getUserByEmail(user1.getEmail()));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfUserNotFoundWithSuchEmail() {
+        expectedEx.expect(ItemNotFoundException.class);
+        expectedEx.expectMessage("User not found by email" + user2.getEmail());
+
+        userService.getUserByEmail(user2.getEmail());
+    }
+
+    @Test
     public void shouldThrowExceptionUserWithSuchEmailAlreadyRegistered() {
+        expectedEx.expect(ItemAlreadyExistException.class);
+        expectedEx.expectMessage("User already registered with such email " + user1.getEmail());
+
         userService.save(user1);
         userService.save(user1);
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test
     public void shouldRemoveRegisteredUser() {
+        expectedEx.expect(ItemNotFoundException.class);
+        expectedEx.expectMessage("User not found by id: " + user1.getId());
+
         userService.remove(user1);
         userService.getById(user1.getId());
+    }
+
+    @Test
+    public void shouldThrowExceptionIfRegisteredUserNotFound() {
+        expectedEx.expect(ItemNotFoundException.class);
+        expectedEx.expectMessage("User not found by id: " + user2.getId());
+
+        userService.remove(user2);
     }
 
     @Test

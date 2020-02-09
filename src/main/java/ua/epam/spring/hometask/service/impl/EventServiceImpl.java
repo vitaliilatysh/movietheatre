@@ -19,7 +19,7 @@ public class EventServiceImpl implements EventService {
     @Nullable
     @Override
     public Event getByName(@Nonnull String name) {
-        return null;
+        return eventDao.getByName(name);
     }
 
     @Override
@@ -29,17 +29,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void remove(@Nonnull Event object) {
-
+        eventDao.remove(object);
     }
 
     @Override
     public Event getById(@Nonnull String id) {
-        return null;
+        return eventDao.getById(id);
     }
 
     @Nonnull
     @Override
     public Collection<Event> getAll() {
-        return null;
+        return eventDao.getAll();
     }
 }
