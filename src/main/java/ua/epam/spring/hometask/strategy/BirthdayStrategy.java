@@ -14,6 +14,6 @@ public class BirthdayStrategy implements DiscountStrategy {
                       @Nonnull Event event,
                       @Nonnull LocalDateTime airDateTime,
                       long numberOfTickets) {
-        return 0;
+        return (byte) 5;
     }
 }
