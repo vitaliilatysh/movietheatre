@@ -9,29 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Store {
-    private static Store instance;
-    private Map<String, User> userMap;
-    private Map<String, Ticket> ticketMap;
-    private Map<String, Event> eventMap;
-    private Map<String, Auditorium> auditoriumMap;
-
-    private Store() {
-        this.userMap = new HashMap<>();
-        this.ticketMap = new HashMap<>();
-        this.eventMap = new HashMap<>();
-        this.auditoriumMap = new HashMap<>();
-    }
-
-    public static Store getStoreInstance() {
-        if (instance == null) {
-            synchronized (Store.class) {
-                if (instance == null) {
-                    instance = new Store();
-                }
-            }
-        }
-        return instance;
-    }
+    private Map<String, User> userMap = new HashMap<>();
+    private Map<String, Ticket> ticketMap = new HashMap<>();
+    private Map<String, Event> eventMap = new HashMap<>();
+    private Map<String, Auditorium> auditoriumMap = new HashMap<>();
 
     public Map<String, User> getUserMap() {
         return userMap;

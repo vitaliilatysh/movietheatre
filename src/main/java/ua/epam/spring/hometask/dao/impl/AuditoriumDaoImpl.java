@@ -38,7 +38,7 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
         Optional<Auditorium> foundAuditorium = store.getAuditoriumMap().values().stream()
                 .filter(event -> event.getName().equalsIgnoreCase(auditoriumName))
                 .findAny();
-        return foundAuditorium.orElseThrow(() -> new ItemNotFoundException("Auditorium not found by email" + auditoriumName));
+        return foundAuditorium.orElseThrow(() -> new ItemNotFoundException("Auditorium not found by name " + auditoriumName));
     }
 
     @Override
