@@ -15,8 +15,11 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
     private List<Long> seats;
     private List<Long> vipSeats;
 
-    public AuditoriumDaoImpl(Store store) {
+    public AuditoriumDaoImpl(Store store, List<String> names, List<Long> seats, List<Long> vipSeats) {
         this.store = store;
+        this.names = names;
+        this.seats = seats;
+        this.vipSeats = vipSeats;
     }
 
     public void init() {
@@ -62,27 +65,4 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
         return store.getAuditoriumMap().values();
     }
 
-    public List<String> getNames() {
-        return names;
-    }
-
-    public void setNames(List<String> names) {
-        this.names = names;
-    }
-
-    public List<Long> getSeats() {
-        return seats;
-    }
-
-    public void setSeats(List<Long> seats) {
-        this.seats = seats;
-    }
-
-    public List<Long> getVipSeats() {
-        return vipSeats;
-    }
-
-    public void setVipSeats(List<Long> vipSeats) {
-        this.vipSeats = vipSeats;
-    }
 }

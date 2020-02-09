@@ -14,6 +14,8 @@ public class EveryNTicketStrategy implements DiscountStrategy {
                       @Nonnull Event event,
                       @Nonnull LocalDateTime airDateTime,
                       long numberOfTickets) {
+        long numberTicketWin = numberOfTickets / 10;
+
         return 0;
     }
 }

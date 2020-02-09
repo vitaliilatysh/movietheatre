@@ -7,6 +7,7 @@ import ua.epam.spring.hometask.service.EventService;
 import ua.epam.spring.hometask.service.UserService;
 import ua.epam.spring.hometask.strategy.BirthdayStrategy;
 import ua.epam.spring.hometask.strategy.DiscountStrategy;
+import ua.epam.spring.hometask.strategy.EveryNTicketStrategy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,14 +39,12 @@ public class DiscountServiceImpl implements DiscountService {
         byte everyNTicketDiscount = 0;
 
         if (user == null) {
-            return 0;
+            return checkEveryNTicketDiscount(event, airDateTime, numberOfTickets, everyNTicketDiscount);
         }
 
-        LocalDate userBirthDate = user.getBirthDate();
+        everyNTicketDiscount = checkEveryNTicketDiscount(event, airDateTime, numberOfTickets, everyNTicketDiscount);
 
-        everyNTicketDiscount = checkEveryNTicketDiscount(user, event, airDateTime, numberOfTickets, everyNTicketDiscount, userBirthDate);
-
-        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, numberOfTickets, birthDateDiscount, userBirthDate);
+        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, numberOfTickets, birthDateDiscount);
 
         if (birthDateDiscount > everyNTicketDiscount) {
             return birthDateDiscount;
@@ -53,23 +52,24 @@ public class DiscountServiceImpl implements DiscountService {
         return everyNTicketDiscount;
     }
 
-    private byte checkEveryNTicketDiscount(User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets, byte everyNTicketDiscount, LocalDate userBirthDate) {
-        if (airDateTime.toLocalDate().equals(userBirthDate)) {
+    private byte checkEveryNTicketDiscount(@Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets, byte everyNTicketDiscount) {
+        if (numberOfTickets >= 10) {
             Optional<DiscountStrategy> first = discountStrategy.stream()
-                    .filter(strategy -> strategy instanceof BirthdayStrategy).findFirst();
+                    .filter(strategy -> strategy instanceof EveryNTicketStrategy).findFirst();
 
             if (first.isPresent()) {
-                everyNTicketDiscount = first.get().count(user, event, airDateTime, numberOfTickets);
+                everyNTicketDiscount = first.get().count(null, event, airDateTime, numberOfTickets);
             }
         }
         return everyNTicketDiscount;
     }
 
-    private byte checkBirthdayDiscount(User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets, byte birthDateDiscount, LocalDate userBirthDate) {
+    private byte checkBirthdayDiscount(User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets, byte birthDateDiscount) {
+        LocalDate userBirthDate = user.getBirthDate();
+
         if (diffInDays(userBirthDate, airDateTime) >= 0 && diffInDays(userBirthDate, airDateTime) <= 5) {
             Optional<DiscountStrategy> first = discountStrategy.stream()
                     .filter(strategy -> strategy instanceof BirthdayStrategy).findFirst();
-
             if (first.isPresent()) {
                 birthDateDiscount = first.get().count(user, event, airDateTime, numberOfTickets);
             }
