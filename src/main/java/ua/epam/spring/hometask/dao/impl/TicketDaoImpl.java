@@ -21,7 +21,12 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user, @Nonnull Set<Long> seats) {
+    public double getTicketsPrice(@Nonnull Event event,
+                                  @Nonnull LocalDateTime dateTime,
+                                  @Nullable User user,
+                                  @Nonnull Set<Long> seats) {
+
+
         return store.getTicketMap().values().stream()
                 .filter(ticket -> ticket.getEvent().getId().equals(event.getId()) &&
                         ticket.getDateTime().equals(dateTime)

@@ -1,13 +1,10 @@
 package ua.epam.spring.hometask.strategy;
 
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.User;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public interface DiscountStrategy {
 
-    byte count(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets);
+    BigDecimal count(Event event, long seats, long vipSeats, BigDecimal totalSum);
 }

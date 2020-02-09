@@ -10,6 +10,7 @@ import ua.epam.spring.hometask.domain.EventRating;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.DiscountService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -45,90 +46,90 @@ public class DiscountServiceImplTest extends BaseTest {
 
     @Test
     public void shouldReturnBirthdayDiscountIfEventAirDateEqualsUserBirthday() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0),
-                9);
+                9, 0);
 
-        assertEquals(5, discount);
+        assertEquals(45, discount.intValue());
     }
 
     @Test
     public void shouldReturnBirthdayDiscountIfUserBirthdayWithinNDayOfEventAirDate() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 19, 12, 0),
-                9);
+                9, 0);
 
-        assertEquals(5, discount);
+        assertEquals(45, discount.intValue());
     }
 
     @Test
-    public void shouldReturn0DiscountIfUserBirthdayBeforeTheEventAirDate() {
-        byte discount = discountService.getDiscount(
+    public void shouldNotReturnDiscountIfUserBirthdayBeforeTheEventAirDate() {
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 16, 12, 0),
-                9);
+                9, 0);
 
-        assertEquals(0, discount);
+        assertEquals(0, discount.intValue());
     }
 
     @Test
-    public void shouldReturn0DiscountIfUserBirthdayAfterNDayTheEventAirDate() {
-        byte discount = discountService.getDiscount(
+    public void shouldNotReturnDiscountIfUserBirthdayAfterNDayTheEventAirDate() {
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                9);
+                9, 0);
 
-        assertEquals(0, discount);
+        assertEquals(0, discount.intValue());
     }
 
 
     @Test
     public void shouldNotReturnDiscountIfUserByLessThenNTickets() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                9);
+                9, 0);
 
-        assertEquals(0, discount);
+        assertEquals(0, discount.intValue());
     }
 
     @Test
     public void shouldReturnDiscountIfUserByNTickets() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                10);
+                10, 0);
 
-        assertEquals(5, discount);
+        assertEquals(50, discount.intValue());
     }
 
     @Test
     public void shouldReturnDiscountIfUserByNTickets1Time() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                19);
+                19, 0);
 
-        assertEquals(3, discount);
+        assertEquals(50, discount.intValue());
     }
 
     @Test
     public void shouldReturnDiscountIfUserByNTickets2Times() {
-        byte discount = discountService.getDiscount(
+        BigDecimal discount = discountService.getDiscount(
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                20);
+                20, 0);
 
-        assertEquals(5, discount);
+        assertEquals(100, discount.intValue());
     }
 }

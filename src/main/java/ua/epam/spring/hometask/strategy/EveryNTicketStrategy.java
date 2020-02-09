@@ -1,29 +1,30 @@
 package ua.epam.spring.hometask.strategy;
 
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.User;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public class EveryNTicketStrategy implements DiscountStrategy {
 
-    private static final byte DISCOUNT = 50;
     private static final byte N_TICKET_DISCOUNT = 10;
 
     @Override
-    public byte count(@Nullable User user,
-                      @Nonnull Event event,
-                      @Nonnull LocalDateTime airDateTime,
-                      long numberOfTickets) {
-        byte winTicketsNumber = (byte) (numberOfTickets / N_TICKET_DISCOUNT);
-        byte totalDiscount = 0;
+    public BigDecimal count(Event event, long seats, long vipSeats, BigDecimal totalSum) {
+        BigDecimal sumSeats = BigDecimal.valueOf(seats + vipSeats);
+        BigDecimal basePrice = BigDecimal.valueOf(event.getBasePrice());
 
-        if (numberOfTickets >= 1) {
-            totalDiscount = (byte) Math.round((double) DISCOUNT * winTicketsNumber / numberOfTickets);
+        BigDecimal winTicketsNumber = sumSeats.divide(BigDecimal.valueOf(N_TICKET_DISCOUNT)).setScale(0, BigDecimal.ROUND_DOWN);
+
+        BigDecimal totalNotWinTicketPrice = basePrice.multiply(sumSeats.subtract(winTicketsNumber));
+
+        BigDecimal winTicketsPrice = basePrice.multiply(winTicketsNumber).multiply(BigDecimal.valueOf(0.5));
+
+        BigDecimal totalWithDiscount = totalNotWinTicketPrice.add(winTicketsPrice);
+
+        if (totalSum.compareTo(totalWithDiscount) > 0) {
+            return totalSum.subtract(totalWithDiscount);
         }
 
-        return totalDiscount;
+        return BigDecimal.ZERO;
     }
 }
