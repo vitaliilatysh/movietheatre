@@ -9,13 +9,21 @@ import java.time.LocalDateTime;
 
 public class EveryNTicketStrategy implements DiscountStrategy {
 
+    private static final byte DISCOUNT = 50;
+    private static final byte N_TICKET_DISCOUNT = 10;
+
     @Override
     public byte count(@Nullable User user,
                       @Nonnull Event event,
                       @Nonnull LocalDateTime airDateTime,
                       long numberOfTickets) {
-        long numberTicketWin = numberOfTickets / 10;
+        byte winTicketsNumber = (byte) (numberOfTickets / N_TICKET_DISCOUNT);
+        byte totalDiscount = 0;
 
-        return 0;
+        if (numberOfTickets >= 1) {
+            totalDiscount = (byte) Math.round((double) DISCOUNT * winTicketsNumber / numberOfTickets);
+        }
+
+        return totalDiscount;
     }
 }

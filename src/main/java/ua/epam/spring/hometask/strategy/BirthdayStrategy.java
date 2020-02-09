@@ -9,11 +9,14 @@ import java.time.LocalDateTime;
 
 public class BirthdayStrategy implements DiscountStrategy {
 
+    private static final byte BIRTHDAY_DISCOUNT = 5;
+
     @Override
     public byte count(@Nullable User user,
                       @Nonnull Event event,
                       @Nonnull LocalDateTime airDateTime,
                       long numberOfTickets) {
-        return (byte) 5;
+
+        return BIRTHDAY_DISCOUNT;
     }
 }
