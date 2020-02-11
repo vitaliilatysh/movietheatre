@@ -1,14 +1,15 @@
 package ua.epam.spring.hometask.service.impl;
 
+import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.EventRating;
+import ua.epam.spring.hometask.domain.Seat;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.DiscountService;
 import ua.epam.spring.hometask.service.EventService;
 import ua.epam.spring.hometask.service.UserService;
-import ua.epam.spring.hometask.strategy.BirthdayStrategy;
 import ua.epam.spring.hometask.strategy.DiscountStrategy;
-import ua.epam.spring.hometask.strategy.EveryNTicketStrategy;
+import ua.epam.spring.hometask.strategy.impl.BirthdayStrategy;
+import ua.epam.spring.hometask.strategy.impl.EveryNTicketStrategy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class DiscountServiceImpl implements DiscountService {
 
@@ -36,19 +38,18 @@ public class DiscountServiceImpl implements DiscountService {
     public BigDecimal getDiscount(@Nullable User user,
                                   @Nonnull Event event,
                                   @Nonnull LocalDateTime airDateTime,
-                                  long seats, long vipSeats) {
-        BigDecimal totalSum = BigDecimal.ZERO;
+                                  @Nonnull Set<Long> seats,
+                                  BigDecimal totalSum) {
         BigDecimal everyNTicketDiscount;
         BigDecimal birthDateDiscount;
 
-        totalSum = getPrimarySum(event, seats, vipSeats, totalSum);
-
+        Auditorium auditorium = event.getAuditoriums()
         if (user == null) {
-            return checkEveryNTicketDiscount(event, seats, vipSeats, totalSum);
+            return checkEveryNTicketDiscount(event, seats, totalSum);
         }
 
-        everyNTicketDiscount = checkEveryNTicketDiscount(event, seats, vipSeats, totalSum);
-        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, seats, vipSeats, totalSum);
+        everyNTicketDiscount = checkEveryNTicketDiscount(event, seats, totalSum);
+        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, seats, totalSum);
 
         if (birthDateDiscount.compareTo(everyNTicketDiscount) > 0) {
             return birthDateDiscount;
@@ -56,44 +57,20 @@ public class DiscountServiceImpl implements DiscountService {
         return everyNTicketDiscount;
     }
 
-    private BigDecimal getPrimarySum(@Nonnull Event event, long seats, long vipSeats, BigDecimal totalSum) {
-        BigDecimal basePrice = BigDecimal.valueOf(event.getBasePrice());
-        BigDecimal ticketsNumber = BigDecimal.valueOf(seats);
-        BigDecimal vipTicketsNumber = BigDecimal.valueOf(vipSeats);
-
-
-        if (vipTicketsNumber.intValue() != 0 && ticketsNumber.intValue() != 0) {
-            totalSum = basePrice.multiply(ticketsNumber)
-                    .add(vipTicketsNumber).multiply(BigDecimal.valueOf(2));
-        }
-        if (vipTicketsNumber.intValue() == 0 && ticketsNumber.intValue() != 0) {
-            totalSum = basePrice.multiply(ticketsNumber);
-        }
-
-        if (vipTicketsNumber.intValue() != 0 && ticketsNumber.intValue() == 0) {
-            totalSum = basePrice.multiply(vipTicketsNumber).multiply(BigDecimal.valueOf(2));
-        }
-
-        if (EventRating.HIGH.equals(event.getRating())) {
-            totalSum = totalSum.multiply(BigDecimal.valueOf(1.2));
-        }
-        return totalSum;
-    }
-
-    private BigDecimal checkEveryNTicketDiscount(Event event, long seats, long vipSeats, BigDecimal totalSum) {
+    private BigDecimal checkEveryNTicketDiscount(Event event, Set<Seat> seats, BigDecimal totalSum) {
         BigDecimal result = BigDecimal.ZERO;
-        if (seats + vipSeats >= 10) {
+        if (seats.size() >= 10) {
             Optional<DiscountStrategy> first = discountStrategy.stream()
                     .filter(strategy -> strategy instanceof EveryNTicketStrategy).findFirst();
 
             if (first.isPresent()) {
-                result = first.get().count(event, seats, vipSeats, totalSum);
+                result = first.get().count(event, seats, totalSum);
             }
         }
         return result;
     }
 
-    private BigDecimal checkBirthdayDiscount(User user, Event event, @Nonnull LocalDateTime airDateTime, long seats, long vipSeats, BigDecimal totalSum) {
+    private BigDecimal checkBirthdayDiscount(User user, Event event, @Nonnull LocalDateTime airDateTime, Set<Seat> seats, BigDecimal totalSum) {
         LocalDate userBirthDate = user.getBirthDate();
         BigDecimal result = BigDecimal.ZERO;
 
@@ -101,7 +78,7 @@ public class DiscountServiceImpl implements DiscountService {
             Optional<DiscountStrategy> first = discountStrategy.stream()
                     .filter(strategy -> strategy instanceof BirthdayStrategy).findFirst();
             if (first.isPresent()) {
-                result = first.get().count(event, seats, vipSeats, totalSum);
+                result = first.get().count(event, seats, totalSum);
             }
         }
         return result;

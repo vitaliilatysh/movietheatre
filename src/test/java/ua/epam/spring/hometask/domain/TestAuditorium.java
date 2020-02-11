@@ -24,7 +24,7 @@ public class TestAuditorium {
 
     public void testGetAllSeats() {
         Auditorium a = new Auditorium();
-        a.setNumberOfSeats(10);
+        a.setRegularSeats(10);
         assertEquals(10, a.getAllSeats().size());
     }
 

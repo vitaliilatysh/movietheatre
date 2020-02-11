@@ -2,7 +2,11 @@ package ua.epam.spring.hometask.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * @author Yuriy_Tkach
@@ -32,9 +36,8 @@ public class Event extends DomainObject {
         if (airDates.contains(dateTime)) {
             auditoriums.put(dateTime, auditorium);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -181,13 +184,8 @@ public class Event extends DomainObject {
         }
         Event other = (Event) obj;
         if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
+            return other.name == null;
+        } else return name.equals(other.name);
     }
 
 }

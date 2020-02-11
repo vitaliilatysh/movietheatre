@@ -11,6 +11,7 @@
 
     <bean id="bookingService" class="ua.epam.spring.hometask.service.impl.BookingServiceImpl">
         <constructor-arg ref="ticketDao"/>
+        <constructor-arg ref="discountService"/>
     </bean>
 
     <bean id="eventService" class="ua.epam.spring.hometask.service.impl.EventServiceImpl">

@@ -4,19 +4,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 /**
  * @author Yuriy_Tkach
  */
-public class Auditorium extends DomainObject{
+public class Auditorium extends DomainObject {
 
     private String name;
-
-    private long numberOfSeats;
-
-    private Set<Long> vipSeats = Collections.emptySet();
+    private Set<Seat> regularSeats = Collections.emptySet();
+    private Set<Seat> vipSeats = Collections.emptySet();
 
     public Auditorium() {
     }
@@ -28,7 +24,7 @@ public class Auditorium extends DomainObject{
      * @return number of vip seats in request
      */
     public long countVipSeats(Collection<Long> seats) {
-        return seats.stream().filter(seat -> vipSeats.contains(seat)).count();
+        return vipSeats.size();
     }
 
     public String getName() {
@@ -39,23 +35,24 @@ public class Auditorium extends DomainObject{
         this.name = name;
     }
 
-    public long getNumberOfSeats() {
-        return numberOfSeats;
+    public long getRegularSeats() {
+        return regularSeats.size();
     }
 
-    public void setNumberOfSeats(long numberOfSeats) {
-        this.numberOfSeats = numberOfSeats;
+    public void setRegularSeats(Set<Seat> regularSeats) {
+        this.regularSeats = regularSeats;
     }
 
-    public Set<Long> getAllSeats() {
-        return LongStream.range(1, numberOfSeats + 1).boxed().collect(Collectors.toSet());
+    public Set<Seat> getAllSeats() {
+        regularSeats.addAll(vipSeats);
+        return regularSeats;
     }
 
-    public Set<Long> getVipSeats() {
+    public Set<Seat> getVipSeats() {
         return vipSeats;
     }
 
-    public void setVipSeats(Set<Long> vipSeats) {
+    public void setVipSeats(Set<Seat> vipSeats) {
         this.vipSeats = vipSeats;
     }
 
@@ -77,13 +74,8 @@ public class Auditorium extends DomainObject{
         }
         Auditorium other = (Auditorium) obj;
         if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
+            return other.name == null;
+        } else return name.equals(other.name);
     }
 
 }
