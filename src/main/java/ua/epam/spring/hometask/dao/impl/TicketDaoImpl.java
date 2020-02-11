@@ -32,7 +32,7 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public void bookTickets(@Nonnull Set<Ticket> tickets) {
         tickets.forEach(ticket ->
-                store.getTicketMap().put(ticket.getId(), ticket)
+                store.getTicketMap().put(ticket.toString(), ticket)
         );
     }
 

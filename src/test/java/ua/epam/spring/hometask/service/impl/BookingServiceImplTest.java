@@ -5,10 +5,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import ua.epam.spring.hometask.BaseTest;
-import ua.epam.spring.hometask.domain.Auditorium;
-import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.EventRating;
-import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.domain.*;
 import ua.epam.spring.hometask.service.AuditoriumService;
 import ua.epam.spring.hometask.service.BookingService;
 import ua.epam.spring.hometask.service.EventService;
@@ -35,6 +32,10 @@ public class BookingServiceImplTest extends BaseTest {
     private static LocalDateTime airDateTime2;
     private static User user1;
     private static Set<Long> seats;
+    private static Seat seat1;
+    private static Seat seat2;
+    private static Ticket ticket1;
+    private static Ticket ticket2;
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
@@ -79,6 +80,15 @@ public class BookingServiceImplTest extends BaseTest {
         event2.setAirDates(new TreeSet<>());
         event2.setAuditoriums(new TreeMap<>());
 
+        seat1 = new Seat();
+        seat1.setNumber(1L);
+
+        seat2 = new Seat();
+        seat2.setNumber(2L);
+
+        ticket1 = new Ticket(user1, event1, airDateTime1, seat1);
+        ticket2 = new Ticket(user1, event1, airDateTime1, seat2);
+
     }
 
     @After
@@ -98,10 +108,15 @@ public class BookingServiceImplTest extends BaseTest {
     }
 
     @Test
-    public void bookTickets() {
+    public void shouldBookTickets() {
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
+        assertEquals(2, store.getTicketMap().values().size());
+
     }
 
     @Test
-    public void getPurchasedTicketsForEvent() {
+    public void shouldReturnPurchasedTicketsForEvent() {
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
+        assertEquals(2, bookingService.getPurchasedTicketsForEvent(event1, airDateTime1).size());
     }
 }
