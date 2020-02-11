@@ -1,13 +1,7 @@
 package ua.epam.spring.hometask.dao.impl;
 
-import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.dao.TicketDao;
-import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.EventRating;
-import ua.epam.spring.hometask.domain.Seat;
-import ua.epam.spring.hometask.domain.SeatType;
-import ua.epam.spring.hometask.domain.Ticket;
-import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.domain.*;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
@@ -18,24 +12,20 @@ import java.util.stream.Collectors;
 
 public class TicketDaoImpl implements TicketDao {
 
-    public static final int MULTIPLE_PRICE_FOR_VIP_SEATS_IN_TIMES = 2;
-    public static final double MULTIPLE_PRICE_FOR_RATED_MOVIES_IN_TIMES = 1.2d;
+    private static final int MULTIPLE_PRICE_FOR_VIP_SEATS_IN_TIMES = 2;
+    private static final double MULTIPLE_PRICE_FOR_RATED_MOVIES_IN_TIMES = 1.2d;
 
     private Store store;
-    private AuditoriumDao auditoriumDao;
 
-    public TicketDaoImpl(Store store, AuditoriumDao auditoriumDao) {
+    public TicketDaoImpl(Store store) {
         this.store = store;
-        this.auditoriumDao = auditoriumDao;
     }
 
     @Override
     public double getTicketsPrice(@Nonnull Event event,
                                   @Nonnull LocalDateTime dateTime,
                                   @Nullable User user,
-                                  @Nonnull Set<Long> seats) {
-
-
+                                  @Nonnull Set<Seat> seats) {
         return getPrimarySum(event, seats);
     }
 

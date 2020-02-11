@@ -1,10 +1,8 @@
 package ua.epam.spring.hometask.strategy;
 
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.Seat;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 public interface DiscountStrategy {
 
@@ -14,5 +12,5 @@ public interface DiscountStrategy {
      * @param totalSum total price of all buying tickets
      * @return the discount
      */
-    BigDecimal count(Event event, Set<Seat> seats, BigDecimal totalSum);
+    BigDecimal count(Event event, int seats, BigDecimal totalSum);
 }

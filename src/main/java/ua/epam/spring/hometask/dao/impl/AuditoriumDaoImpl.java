@@ -8,21 +8,16 @@ import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 public class AuditoriumDaoImpl implements AuditoriumDao {
 
     private Store store;
     private List<String> names;
-    private int seats;
-    private int vipSeats;
+    private List<Long> seats;
+    private List<Long> vipSeats;
 
-    public AuditoriumDaoImpl(Store store, List<String> names, int seats, int vipSeats) {
+    public AuditoriumDaoImpl(Store store, List<String> names, List<Long> seats, List<Long> vipSeats) {
         this.store = store;
         this.names = names;
         this.seats = seats;
@@ -30,32 +25,34 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
     }
 
     public void init() {
-        Set<Seat> regulars = new TreeSet<>();
-        Set<Seat> vips = new TreeSet<>();
+        for (int i = 0; i < names.size(); i++) {
+            Set<Seat> regulars = new TreeSet<>();
+            Set<Seat> vips = new TreeSet<>();
 
-        for (int seatNumber = 1; seatNumber <= seats; seatNumber++) {
-            Seat seat = new Seat();
-            seat.setNumber(seatNumber);
-            seat.setSeatType(SeatType.REGULAR);
-            regulars.add(seat);
-        }
-
-        for (int seatNumber = seats + 1; seatNumber < (seats + vipSeats); seatNumber++) {
-            Seat seat = new Seat();
-            seat.setNumber(seatNumber);
-            seat.setSeatType(SeatType.VIP);
-        }
-
-        names.forEach(name -> {
             String uniqueID = UUID.randomUUID().toString();
             Auditorium auditorium = new Auditorium();
             auditorium.setId(uniqueID);
-            auditorium.setName(name);
+            auditorium.setName(names.get(i));
+
+            for (Long seatNumber = 1L; seatNumber <= seats.get(i); seatNumber++) {
+                Seat seat = new Seat();
+                seat.setNumber(seatNumber);
+                seat.setSeatType(SeatType.REGULAR);
+                regulars.add(seat);
+            }
             auditorium.setRegularSeats(regulars);
+
+            for (Long vipSeatNumber = seats.get(i) + 1; vipSeatNumber <= vipSeats.get(i); vipSeatNumber++) {
+                Seat seat = new Seat();
+                seat.setNumber(vipSeatNumber);
+                seat.setSeatType(SeatType.VIP);
+                vips.add(seat);
+            }
             auditorium.setVipSeats(vips);
 
+
             store.getAuditoriumMap().put(uniqueID, auditorium);
-        });
+        }
     }
 
     @Override

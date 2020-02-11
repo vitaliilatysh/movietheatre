@@ -50,7 +50,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0),
-                9, 0);
+                9, BigDecimal.valueOf(900));
 
         assertEquals(45, discount.intValue());
     }
@@ -61,7 +61,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 19, 12, 0),
-                9, 0);
+                9, BigDecimal.valueOf(900));
 
         assertEquals(45, discount.intValue());
     }
@@ -72,7 +72,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 16, 12, 0),
-                9, 0);
+                9, BigDecimal.valueOf(900));
 
         assertEquals(0, discount.intValue());
     }
@@ -83,7 +83,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                9, 0);
+                9, BigDecimal.valueOf(900));
 
         assertEquals(0, discount.intValue());
     }
@@ -95,7 +95,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                9, 0);
+                9, BigDecimal.valueOf(900));
 
         assertEquals(0, discount.intValue());
     }
@@ -106,7 +106,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                10, 0);
+                10, BigDecimal.valueOf(1000));
 
         assertEquals(50, discount.intValue());
     }
@@ -117,7 +117,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                19, 0);
+                19, BigDecimal.valueOf(1900));
 
         assertEquals(50, discount.intValue());
     }
@@ -128,7 +128,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 user,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
-                20, 0);
+                20, BigDecimal.valueOf(2000));
 
         assertEquals(100, discount.intValue());
     }

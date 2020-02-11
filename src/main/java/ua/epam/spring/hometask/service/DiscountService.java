@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * @author Yuriy_Tkach
@@ -21,14 +20,14 @@ public interface DiscountService {
      * @param user        User that buys tickets. Can be <code>null</code>
      * @param event       Event that tickets are bought for
      * @param airDateTime The date and time event will be aired
-     * @param seats       Number of seats that user buys
+     * @param seatsAmount Number of seats that user buys
      * @param totalPrice  total buying tickets price
      * @return how much points from total price will be dropped
      */
     BigDecimal getDiscount(@Nullable User user,
                            @Nonnull Event event,
                            @Nonnull LocalDateTime airDateTime,
-                           @Nonnull Set<Long> seats,
+                           int seatsAmount,
                            BigDecimal totalPrice);
 
 }

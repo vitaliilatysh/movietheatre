@@ -1,12 +1,8 @@
 package ua.epam.spring.hometask.service.impl;
 
-import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.Seat;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.DiscountService;
-import ua.epam.spring.hometask.service.EventService;
-import ua.epam.spring.hometask.service.UserService;
 import ua.epam.spring.hometask.strategy.DiscountStrategy;
 import ua.epam.spring.hometask.strategy.impl.BirthdayStrategy;
 import ua.epam.spring.hometask.strategy.impl.EveryNTicketStrategy;
@@ -18,18 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class DiscountServiceImpl implements DiscountService {
 
-    private UserService userService;
-    private EventService eventService;
     private List<DiscountStrategy> discountStrategy;
-
-    public DiscountServiceImpl(UserService userService, EventService eventService) {
-        this.userService = userService;
-        this.eventService = eventService;
-    }
 
     public DiscountServiceImpl() {
     }
@@ -38,18 +26,17 @@ public class DiscountServiceImpl implements DiscountService {
     public BigDecimal getDiscount(@Nullable User user,
                                   @Nonnull Event event,
                                   @Nonnull LocalDateTime airDateTime,
-                                  @Nonnull Set<Long> seats,
+                                  int orderedSeats,
                                   BigDecimal totalSum) {
         BigDecimal everyNTicketDiscount;
         BigDecimal birthDateDiscount;
 
-        Auditorium auditorium = event.getAuditoriums()
         if (user == null) {
-            return checkEveryNTicketDiscount(event, seats, totalSum);
+            return checkEveryNTicketDiscount(event, orderedSeats, totalSum);
         }
 
-        everyNTicketDiscount = checkEveryNTicketDiscount(event, seats, totalSum);
-        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, seats, totalSum);
+        everyNTicketDiscount = checkEveryNTicketDiscount(event, orderedSeats, totalSum);
+        birthDateDiscount = checkBirthdayDiscount(user, event, airDateTime, totalSum);
 
         if (birthDateDiscount.compareTo(everyNTicketDiscount) > 0) {
             return birthDateDiscount;
@@ -57,20 +44,20 @@ public class DiscountServiceImpl implements DiscountService {
         return everyNTicketDiscount;
     }
 
-    private BigDecimal checkEveryNTicketDiscount(Event event, Set<Seat> seats, BigDecimal totalSum) {
+    private BigDecimal checkEveryNTicketDiscount(Event event, int seatsAmount, BigDecimal totalSum) {
         BigDecimal result = BigDecimal.ZERO;
-        if (seats.size() >= 10) {
+        if (seatsAmount >= 10) {
             Optional<DiscountStrategy> first = discountStrategy.stream()
                     .filter(strategy -> strategy instanceof EveryNTicketStrategy).findFirst();
 
             if (first.isPresent()) {
-                result = first.get().count(event, seats, totalSum);
+                result = first.get().count(event, seatsAmount, totalSum);
             }
         }
         return result;
     }
 
-    private BigDecimal checkBirthdayDiscount(User user, Event event, @Nonnull LocalDateTime airDateTime, Set<Seat> seats, BigDecimal totalSum) {
+    private BigDecimal checkBirthdayDiscount(User user, Event event, @Nonnull LocalDateTime airDateTime, BigDecimal totalSum) {
         LocalDate userBirthDate = user.getBirthDate();
         BigDecimal result = BigDecimal.ZERO;
 
@@ -78,7 +65,7 @@ public class DiscountServiceImpl implements DiscountService {
             Optional<DiscountStrategy> first = discountStrategy.stream()
                     .filter(strategy -> strategy instanceof BirthdayStrategy).findFirst();
             if (first.isPresent()) {
-                result = first.get().count(event, seats, totalSum);
+                result = first.get().count(event, 0, totalSum);
             }
         }
         return result;
