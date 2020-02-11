@@ -2,11 +2,13 @@ package ua.epam.spring.hometask.dao.impl;
 
 import ua.epam.spring.hometask.dao.TicketDao;
 import ua.epam.spring.hometask.domain.*;
+import ua.epam.spring.hometask.exceptions.TicketAlreadyBookedException;
 import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,15 +24,18 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public double getTicketsPrice(@Nonnull Event event,
-                                  @Nonnull LocalDateTime dateTime,
-                                  @Nullable User user,
-                                  @Nonnull Set<Seat> seats) {
+    public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user, @Nonnull Set<Seat> seats) {
         return getPrimarySum(event, seats);
     }
 
     @Override
     public void bookTickets(@Nonnull Set<Ticket> tickets) {
+        Optional<Ticket> isAnyTicketBooked = tickets.stream().filter(ticket -> ticket.getSeat().isBooked()).findAny();
+
+        if (isAnyTicketBooked.isPresent()) {
+            throw new TicketAlreadyBookedException("Already booked " + isAnyTicketBooked.get().toString());
+        }
+
         tickets.forEach(ticket ->
                 store.getTicketMap().put(ticket.toString(), ticket)
         );
