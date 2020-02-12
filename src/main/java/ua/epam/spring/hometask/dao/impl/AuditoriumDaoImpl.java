@@ -42,7 +42,7 @@ public class AuditoriumDaoImpl implements AuditoriumDao {
             }
             auditorium.setRegularSeats(regulars);
 
-            for (Long vipSeatNumber = seats.size() + 1L; vipSeatNumber <= vipSeats.get(i); vipSeatNumber++) {
+            for (Long vipSeatNumber = seats.get(i) + 1; vipSeatNumber <= seats.get(i) + vipSeats.get(i); vipSeatNumber++) {
                 Seat seat = new Seat();
                 seat.setNumber(vipSeatNumber);
                 seat.setSeatType(SeatType.VIP);
