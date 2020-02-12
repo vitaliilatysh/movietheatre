@@ -1,5 +1,6 @@
 package ua.epam.spring.hometask.storage;
 
+import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
@@ -8,6 +9,7 @@ import ua.epam.spring.hometask.domain.User;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class Store {
     private Map<String, User> userMap = new HashMap<>();
     private Map<String, Ticket> ticketMap = new HashMap<>();

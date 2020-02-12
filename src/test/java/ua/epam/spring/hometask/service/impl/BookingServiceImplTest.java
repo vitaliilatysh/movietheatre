@@ -42,9 +42,9 @@ public class BookingServiceImplTest extends BaseTest {
 
     @BeforeClass
     public static void setUp() {
-        eventService = (EventService) context.getBean("eventService");
-        auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
-        bookingService = (BookingService) context.getBean("bookingService");
+        eventService = context.getBean(EventService.class);
+        auditoriumService = context.getBean(AuditoriumService.class);
+        bookingService = context.getBean(BookingService.class);
 
         store = (Store) context.getBean("store");
 

@@ -26,7 +26,7 @@ public class AuditoriumServiceImplTest extends BaseTest {
 
     @BeforeClass
     public static void setUp() {
-        auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
+        auditoriumService = context.getBean(AuditoriumService.class);
 
         auditorium = new Auditorium();
         auditorium.setName("KinoPlaneta");

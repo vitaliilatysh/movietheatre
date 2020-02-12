@@ -1,5 +1,7 @@
 package ua.epam.spring.hometask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.EventDao;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
@@ -12,12 +14,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class EventDaoImpl implements EventDao {
 
+    @Autowired
     private Store store;
 
-    public EventDaoImpl(Store store) {
-        this.store = store;
+    public EventDaoImpl() {
     }
 
     @Override

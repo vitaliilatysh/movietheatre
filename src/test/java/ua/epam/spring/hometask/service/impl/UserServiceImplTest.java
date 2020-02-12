@@ -29,8 +29,8 @@ public class UserServiceImplTest extends BaseTest {
 
     @BeforeClass
     public static void setUp() {
-        userService = (UserService) context.getBean("userService");
-        store = (Store) context.getBean("store");
+        userService = context.getBean(UserService.class);
+        store = context.getBean(Store.class);
 
         user1 = new User();
         user1.setFirstName("Daniel");

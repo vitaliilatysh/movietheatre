@@ -28,7 +28,7 @@ public class DiscountServiceImplTest extends BaseTest {
 
     @BeforeClass
     public static void setUp() {
-        discountService = (DiscountService) context.getBean("discountService");
+        discountService = context.getBean(DiscountService.class);
 
         event = new Event();
         event.setName("Knives Out");

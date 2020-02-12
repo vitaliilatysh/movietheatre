@@ -30,8 +30,8 @@ public class EventServiceImplTest extends BaseTest {
 
     @BeforeClass
     public static void setUp() {
-        eventService = (EventService) context.getBean("eventService");
-        store = (Store) context.getBean("store");
+        eventService = context.getBean(EventService.class);
+        store = context.getBean(Store.class);
 
         event1 = new Event();
         event1.setName("Knives Out");

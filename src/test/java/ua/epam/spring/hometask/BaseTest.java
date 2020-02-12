@@ -1,12 +1,12 @@
 package ua.epam.spring.hometask;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ua.epam.spring.hometask.config.AppConfig;
 
 public abstract class BaseTest {
 
-    protected static ApplicationContext context = new FileSystemXmlApplicationContext(
-            "/src/main/resources/config/application-context.xml",
-            "/src/main/resources/config/strategies-context.xml");
+    protected static ApplicationContext context =
+            new AnnotationConfigApplicationContext(AppConfig.class);
 
 }

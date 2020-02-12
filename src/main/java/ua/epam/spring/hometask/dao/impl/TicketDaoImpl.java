@@ -1,12 +1,9 @@
 package ua.epam.spring.hometask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.TicketDao;
-import ua.epam.spring.hometask.domain.Auditorium;
-import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.EventRating;
-import ua.epam.spring.hometask.domain.Seat;
-import ua.epam.spring.hometask.domain.Ticket;
-import ua.epam.spring.hometask.domain.User;
+import ua.epam.spring.hometask.domain.*;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.exceptions.TicketAlreadyBookedException;
 import ua.epam.spring.hometask.storage.Store;
@@ -18,15 +15,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Repository
 public class TicketDaoImpl implements TicketDao {
 
     private static final int MULTIPLE_PRICE_FOR_VIP_SEATS_IN_TIMES = 2;
     private static final double MULTIPLE_PRICE_FOR_RATED_MOVIES_IN_TIMES = 1.2d;
 
+    @Autowired
     private Store store;
 
-    public TicketDaoImpl(Store store) {
-        this.store = store;
+    public TicketDaoImpl() {
     }
 
     @Override
