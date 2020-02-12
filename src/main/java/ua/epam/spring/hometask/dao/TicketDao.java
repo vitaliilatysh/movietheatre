@@ -1,7 +1,6 @@
 package ua.epam.spring.hometask.dao;
 
 import ua.epam.spring.hometask.domain.Event;
-import ua.epam.spring.hometask.domain.Seat;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 
@@ -24,7 +23,7 @@ public interface TicketDao {
      * @return total price
      */
     double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
-                           @Nonnull Set<Seat> seats);
+                           @Nonnull Set<Long> seats);
 
     /**
      * Books tickets in internal system. If user is not
