@@ -23,8 +23,12 @@ public class Auditorium extends DomainObject {
      * @param seats Seats to process
      * @return number of vip seats in request
      */
-    public long countVipSeats(Collection<Long> seats) {
-        return vipSeats.size();
+    public long countVipSeats(Collection<Seat> seats) {
+        return seats.stream().filter(seat -> seat.getSeatType().equals(SeatType.VIP)).count();
+    }
+
+    public long countRegularSeats(Collection<Seat> seats) {
+        return seats.stream().filter(seat -> seat.getSeatType().equals(SeatType.REGULAR)).count();
     }
 
     public String getName() {
@@ -35,8 +39,8 @@ public class Auditorium extends DomainObject {
         this.name = name;
     }
 
-    public long getRegularSeats() {
-        return regularSeats.size();
+    public Set<Seat> getRegularSeats() {
+        return regularSeats;
     }
 
     public void setRegularSeats(Set<Seat> regularSeats) {

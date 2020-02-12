@@ -1,23 +1,49 @@
 package ua.epam.spring.hometask.domain;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Yuriy_Tkach
  */
+@RunWith(JUnit4.class)
 public class TestAuditorium {
 
-//    @Test
-//    public void testCountVips() {
-//        Auditorium a = new Auditorium();
-//        a.setVipSeats(Stream.of(1L, 2L, 3L).collect(Collectors.toSet()));
-//        assertEquals(0, a.countVipSeats(Arrays.asList(10L, 20L, 30L)));
-//        assertEquals(1, a.countVipSeats(Arrays.asList(10L, 2L, 30L)));
-//        assertEquals(2, a.countVipSeats(Arrays.asList(10L, 2L, 3L, 4L, 5L, 6L)));
-//    }
-//
-//    public void testGetAllSeats() {
-//        Auditorium a = new Auditorium();
-//        a.setRegularSeats(10);
-//        assertEquals(10, a.getAllSeats().size());
-//    }
+    private Seat seat1, seat2, seat3;
+
+    @Before
+    public void init() {
+        seat1 = new Seat();
+        seat1.setNumber(1L);
+        seat1.setSeatType(SeatType.REGULAR);
+        seat2 = new Seat();
+        seat2.setNumber(2L);
+        seat2.setSeatType(SeatType.VIP);
+        seat3 = new Seat();
+        seat3.setNumber(3L);
+        seat3.setSeatType(SeatType.REGULAR);
+    }
+
+    @Test
+    public void shouldReturnVipSeats() {
+        Auditorium a = new Auditorium();
+        a.setVipSeats(Stream.of(seat1, seat2, seat3).collect(Collectors.toSet()));
+        assertEquals(1, a.countVipSeats(Arrays.asList(seat1, seat2, seat3)));
+    }
+
+    @Test
+    public void shouldReturnAllSeats() {
+        Auditorium a = new Auditorium();
+        a.setRegularSeats(Stream.of(seat1, seat2).collect(Collectors.toSet()));
+        assertEquals(2, a.getAllSeats().size());
+    }
 
 }

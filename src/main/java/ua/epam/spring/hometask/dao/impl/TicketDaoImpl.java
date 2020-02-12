@@ -5,7 +5,6 @@ import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.EventRating;
 import ua.epam.spring.hometask.domain.Seat;
-import ua.epam.spring.hometask.domain.SeatType;
 import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
@@ -43,8 +42,8 @@ public class TicketDaoImpl implements TicketDao {
 
         double result = 0d;
         double basePrice = event.getBasePrice();
-        long regularTicketsNumber = foundSeats.stream().filter(seat -> seat.getSeatType().equals(SeatType.REGULAR)).count();
-        long vipTicketsNumber = foundSeats.stream().filter(seat -> seat.getSeatType().equals(SeatType.VIP)).count();
+        long regularTicketsNumber = auditorium.countRegularSeats(foundSeats);
+        long vipTicketsNumber = auditorium.countVipSeats(foundSeats);
 
         if (vipTicketsNumber != 0 && regularTicketsNumber != 0) {
             result = (basePrice * regularTicketsNumber) + vipTicketsNumber * MULTIPLE_PRICE_FOR_VIP_SEATS_IN_TIMES;
