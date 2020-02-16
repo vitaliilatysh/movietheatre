@@ -23,6 +23,7 @@ public class EventServiceImplTest extends BaseTest {
     private static EventService eventService;
     private static Event event1;
     private static Event event2;
+    private static Event event3;
     private static Store store;
 
     @Rule
@@ -46,6 +47,13 @@ public class EventServiceImplTest extends BaseTest {
         event2.setRating(EventRating.MID);
         event2.setAirDates(new TreeSet<>());
         event2.setAuditoriums(new TreeMap<>());
+
+        event3 = new Event();
+        event3.setName("Vulkan");
+        event3.setBasePrice(60);
+        event3.setRating(EventRating.HIGH);
+        event3.setAirDates(new TreeSet<>());
+        event3.setAuditoriums(new TreeMap<>());
 
     }
 
@@ -119,9 +127,17 @@ public class EventServiceImplTest extends BaseTest {
 
     @Test
     public void shouldReturnCountOfEventCallingByName() {
+        eventService.save(event3);
+
         eventService.getByName(event1.getName());
         eventService.getByName(event1.getName());
 
+        eventService.getByName(event3.getName());
+        eventService.getByName(event3.getName());
+        eventService.getByName(event3.getName());
+
+
         assertEquals(2, (int) store.getCountEventCallByName().get(event1.getName()));
+        assertEquals(3, (int) store.getCountEventCallByName().get(event3.getName()));
     }
 }
