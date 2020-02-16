@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Aspect
 @Component
-public class Aspects {
+public class CounterAspect {
 
     @Autowired
     private Store store;
