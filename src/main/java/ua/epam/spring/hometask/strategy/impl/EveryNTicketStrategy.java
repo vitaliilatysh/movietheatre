@@ -3,6 +3,7 @@ package ua.epam.spring.hometask.strategy.impl;
 import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.strategy.DiscountStrategy;
+import ua.epam.spring.hometask.strategy.StrategyParams;
 
 import java.math.BigDecimal;
 
@@ -13,19 +14,24 @@ public class EveryNTicketStrategy implements DiscountStrategy {
     private static final byte ON_WHAT_TICKET_NUMBER_DISCOUNT_SHOULD_BE_MADE = 10;
 
     @Override
-    public BigDecimal count(Event event, int sumSeats, BigDecimal totalSum) {
-        double basePrice = event.getBasePrice();
+    public BigDecimal count(StrategyParams params) {
+        Event event = params.getEvent();
+        BigDecimal totalSum = params.getTotalSum();
+        int orderedSeats = params.getOrderedSeats();
 
-        int discountTicketsAmount = sumSeats / ON_WHAT_TICKET_NUMBER_DISCOUNT_SHOULD_BE_MADE;
-        double totalPriceForNotDiscountTickets = basePrice * (sumSeats - discountTicketsAmount);
+        if (orderedSeats >= 10) {
+            double basePrice = event.getBasePrice();
 
-        double discountTicketsPrice = basePrice * (discountTicketsAmount * DISCOUNT);
-        double totalWithDiscount = totalPriceForNotDiscountTickets + discountTicketsPrice;
+            int discountTicketsAmount = orderedSeats / ON_WHAT_TICKET_NUMBER_DISCOUNT_SHOULD_BE_MADE;
+            double totalPriceForNotDiscountTickets = basePrice * (orderedSeats - discountTicketsAmount);
 
-        if (totalSum.compareTo(BigDecimal.valueOf(totalWithDiscount)) > 0) {
-            return totalSum.subtract(BigDecimal.valueOf(totalWithDiscount));
+            double discountTicketsPrice = basePrice * (discountTicketsAmount * DISCOUNT);
+            double totalWithDiscount = totalPriceForNotDiscountTickets + discountTicketsPrice;
+
+            if (totalSum.compareTo(BigDecimal.valueOf(totalWithDiscount)) > 0) {
+                return totalSum.subtract(BigDecimal.valueOf(totalWithDiscount));
+            }
         }
-
         return BigDecimal.ZERO;
     }
 }

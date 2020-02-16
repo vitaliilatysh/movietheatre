@@ -126,7 +126,7 @@ public class EventServiceImplTest extends BaseTest {
     }
 
     @Test
-    public void shouldReturnCountOfEventCallingByName() {
+    public void shouldReturnHowManyTimesEventCallingByName() {
         eventService.save(event3);
 
         eventService.getByName(event1.getName());

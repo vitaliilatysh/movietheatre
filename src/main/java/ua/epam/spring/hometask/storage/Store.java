@@ -7,10 +7,13 @@ import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class Store {
+    private List<Discount> discountList = new LinkedList<>();
     private Map<String, Counter> eventCounter = new HashMap<>();
     private Map<String, User> userMap = new HashMap<>();
     private Map<String, Ticket> ticketMap = new HashMap<>();
@@ -35,5 +38,9 @@ public class Store {
 
     public Map<String, Counter> getEventCounterMap() {
         return eventCounter;
+    }
+
+    public List<Discount> getDiscountList() {
+        return discountList;
     }
 }

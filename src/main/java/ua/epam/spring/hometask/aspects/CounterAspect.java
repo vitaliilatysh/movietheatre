@@ -1,7 +1,6 @@
 package ua.epam.spring.hometask.aspects;
 
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,24 +23,21 @@ public class CounterAspect {
     @Autowired
     private Store store;
 
-    @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.getTicketsPrice(..))")
-    public void getTicketsPrice() {
+    @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.getTicketsPrice(..)) && args(event,..)")
+    public void getTicketsPrice(Event event) {
     }
 
-    @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.bookTickets(..))")
-    public void bookTickets() {
+    @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.bookTickets(..)) && args(tickets,..)")
+    public void bookTickets(Set<Ticket> tickets) {
     }
 
     @Pointcut("execution(* ua.epam.spring.hometask.service.impl.EventServiceImpl.getByName(..))")
     public void getEventByName() {
     }
 
-    @After("bookTickets()")
-    public void counterTicketsBookingForEvent(JoinPoint joinPoint) {
+    @After("bookTickets(tickets)")
+    public void counterTicketsBookingForEvent(Set<Ticket> tickets) {
         Map<String, Counter> eventCounterMap = store.getEventCounterMap();
-        Map<String, Event> evnetMap = store.getEventMap();
-        Object[] args = joinPoint.getArgs();
-        Set<Ticket> tickets = (Set<Ticket>) args[0];
 
         List<String> events = tickets.stream().map(ticket -> ticket.getEvent().getName()).distinct()
                 .collect(Collectors.toList());
@@ -60,11 +56,10 @@ public class CounterAspect {
         });
     }
 
-    @After("getTicketsPrice()")
-    public void counterTicketPriceCalling(JoinPoint joinPoint) {
+    @After("getTicketsPrice(event)")
+    public void counterTicketPriceCalling(Event event) {
         Map<String, Counter> eventCounterMap = store.getEventCounterMap();
-        Object[] args = joinPoint.getArgs();
-        String eventName = ((Event) args[0]).getName();
+        String eventName = event.getName();
 
         if (eventCounterMap.containsKey(eventName)) {
             Counter existedCounter = eventCounterMap.get(eventName);
