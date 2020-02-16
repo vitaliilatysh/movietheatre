@@ -35,7 +35,7 @@ public class DiscountAspect {
         if (result.equals(BigDecimal.ZERO)) return;
 
         Discount discount = new Discount();
-        discount.setUserId(params.getUser().getId());
+        discount.setUserId(params.getUser());
         discount.setTypeDiscount(BirthdayStrategy.class);
 
         store.getDiscountList().add(discount);
@@ -48,7 +48,7 @@ public class DiscountAspect {
         if (result.equals(BigDecimal.ZERO)) return;
 
         Discount discount = new Discount();
-        discount.setUserId(params.getUser().getId());
+        discount.setUserId(params.getUser());
         discount.setTypeDiscount(EveryNTicketStrategy.class);
 
         store.getDiscountList().add(discount);

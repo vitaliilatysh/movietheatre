@@ -26,10 +26,11 @@ import static org.junit.Assert.assertEquals;
 public class DiscountServiceImplTest extends BaseTest {
 
     private static DiscountService discountService;
-    private static User user;
+    private static Store store;
+
+    private static User user1, user2, user3;
     private static Event event;
     private static LocalDateTime airDateTime;
-    private static Store store;
 
     @BeforeClass
     public static void setUp() {
@@ -48,11 +49,25 @@ public class DiscountServiceImplTest extends BaseTest {
         event.setAirDates(set);
         event.setAuditoriums(new TreeMap<>());
 
-        user = new User();
-        user.setFirstName("Daniel");
-        user.setLastName("Klein");
-        user.setEmail("d.klein@gmail.com");
-        user.setBirthDate(LocalDate.of(1980, Month.DECEMBER, 17));
+        user1 = new User();
+        user1.setId("1");
+        user1.setFirstName("Daniel");
+        user1.setLastName("Klein");
+        user1.setEmail("d.klein@gmail.com");
+        user1.setBirthDate(LocalDate.of(1980, Month.DECEMBER, 17));
+
+        user2 = new User();
+        user2.setId("2");
+        user2.setFirstName("Mark");
+        user2.setLastName("Reitar");
+        user2.setEmail("m.reitar@gmail.com");
+        user2.setBirthDate(LocalDate.of(1988, Month.OCTOBER, 17));
+
+        user3 = new User();
+        user3.setFirstName("Marko");
+        user3.setLastName("Galanevych");
+        user3.setEmail("m.galanevych@gmail.com");
+        user3.setBirthDate(LocalDate.of(1984, Month.JULY, 7));
     }
 
     @After
@@ -63,7 +78,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldReturnBirthdayDiscountIfEventAirDateEqualsUserBirthday() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0),
                 9, BigDecimal.valueOf(900));
@@ -74,7 +89,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldReturnBirthdayDiscountIfUserBirthdayWithinNDayOfEventAirDate() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 19, 12, 0),
                 9, BigDecimal.valueOf(900));
@@ -85,7 +100,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldNotReturnDiscountIfUserBirthdayBeforeTheEventAirDate() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 16, 12, 0),
                 9, BigDecimal.valueOf(900));
@@ -96,7 +111,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldNotReturnDiscountIfUserBirthdayAfterNDayTheEventAirDate() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 9, BigDecimal.valueOf(900));
@@ -108,7 +123,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldNotReturnDiscountIfUserByLessThenNTickets() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 9, BigDecimal.valueOf(900));
@@ -119,7 +134,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldReturnDiscountIfUserByNTickets() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 10, BigDecimal.valueOf(1000));
@@ -130,7 +145,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldReturnDiscountIfUserByNTickets1Time() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 19, BigDecimal.valueOf(1900));
@@ -141,7 +156,7 @@ public class DiscountServiceImplTest extends BaseTest {
     @Test
     public void shouldReturnDiscountIfUserByNTickets2Times() {
         BigDecimal discount = discountService.getDiscount(
-                user,
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 20, BigDecimal.valueOf(2000));
@@ -151,19 +166,62 @@ public class DiscountServiceImplTest extends BaseTest {
 
     @Test
     public void shouldReturnHowManyTimesUserReceivedTheDiscount() {
-        BigDecimal ticketDiscount = discountService.getDiscount(
-                user,
+        //Discount for N ticket for user1
+        discountService.getDiscount(
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
                 20, BigDecimal.valueOf(2000));
 
-        BigDecimal birthDayDiscount = discountService.getDiscount(
-                user,
+        //Birthday discount for user1
+        discountService.getDiscount(
+                user1,
                 event,
                 LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0),
                 9, BigDecimal.valueOf(900));
 
         assertEquals(2, store.getDiscountList().size());
+
+    }
+
+    @Test
+    public void shouldReturnHowManyTimesEachUserReceivedTheDiscount() {
+        //Discount for N ticket for user1
+        discountService.getDiscount(
+                user1,
+                event,
+                LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
+                20, BigDecimal.valueOf(2000));
+
+        //Birthday discount for user1
+        discountService.getDiscount(
+                user1,
+                event,
+                LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0),
+                9, BigDecimal.valueOf(900));
+
+        //Discount for N ticket for user2
+        discountService.getDiscount(
+                user2,
+                event,
+                LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
+                20, BigDecimal.valueOf(2000));
+
+        //Discount for N ticket for not registered user
+        discountService.getDiscount(
+                user3,
+                event,
+                LocalDateTime.of(2020, Month.DECEMBER, 23, 12, 0),
+                20, BigDecimal.valueOf(2000));
+
+        assertEquals(2, store.getDiscountList().stream()
+                .filter(discount -> discount.getUser().equals(user1))
+                .count());
+        assertEquals(1, store.getDiscountList().stream()
+                .filter(discount -> discount.getUser().equals(user2))
+                .count());
+
+        assertEquals(4, store.getDiscountList().size());
 
     }
 }

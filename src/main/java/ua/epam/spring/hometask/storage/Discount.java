@@ -1,15 +1,17 @@
 package ua.epam.spring.hometask.storage;
 
+import ua.epam.spring.hometask.domain.User;
+
 public class Discount {
-    private String userId;
+    private User user;
     private Class typeDiscount;
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(User user) {
+        this.user = user;
     }
 
     public Class getTypeDiscount() {
