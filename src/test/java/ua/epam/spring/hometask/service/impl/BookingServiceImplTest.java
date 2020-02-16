@@ -25,17 +25,14 @@ public class BookingServiceImplTest extends BaseTest {
     private static BookingService bookingService;
     private static EventService eventService;
     private static AuditoriumService auditoriumService;
-    private static Event event1;
-    private static Event event2;
     private static Store store;
-    private static LocalDateTime airDateTime1;
-    private static LocalDateTime airDateTime2;
+
+    private static Event event1, event2;
+    private static LocalDateTime airDateTime1, airDateTime2;
     private static User user1;
     private static Set<Long> seats;
-    private static Seat seat1;
-    private static Seat seat2;
-    private static Ticket ticket1;
-    private static Ticket ticket2;
+    private static Seat seat1, seat2;
+    private static Ticket ticket1, ticket2, ticket3, ticket4;
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
@@ -91,6 +88,8 @@ public class BookingServiceImplTest extends BaseTest {
 
         ticket1 = new Ticket(user1, event1, airDateTime1, seat1);
         ticket2 = new Ticket(user1, event1, airDateTime1, seat2);
+        ticket3 = new Ticket(user1, event2, airDateTime2, seat1);
+        ticket4 = new Ticket(user1, event2, airDateTime2, seat2);
 
     }
 
@@ -122,6 +121,20 @@ public class BookingServiceImplTest extends BaseTest {
     public void shouldReturnPurchasedTicketsForEvent() {
         bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
         assertEquals(2, bookingService.getPurchasedTicketsForEvent(event1, airDateTime1).size());
+    }
+
+    @Test
+    public void shouldReturnHowManyTimesTicketsForEventBooked() {
+        eventService.save(event2);
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(
+                ticket1,
+                ticket2,
+                ticket3)));
+
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket4)));
+
+        assertEquals(1, store.getEventCounterMap().get(ticket1.getEvent().getName()).getEventTicketsBookedCount());
+        assertEquals(2, store.getEventCounterMap().get(ticket3.getEvent().getName()).getEventTicketsBookedCount());
     }
 
     @Test
