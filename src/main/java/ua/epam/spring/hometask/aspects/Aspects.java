@@ -1,11 +1,14 @@
 package ua.epam.spring.hometask.aspects;
 
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.epam.spring.hometask.domain.Event;
+import ua.epam.spring.hometask.storage.Counter;
 import ua.epam.spring.hometask.storage.Store;
 
 import java.util.Map;
@@ -18,7 +21,7 @@ public class Aspects {
     private Store store;
 
     @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.getTicketsPrice(..))")
-    public void getTicketPrice() {
+    public void getTicketsPrice() {
 
     }
 
@@ -26,20 +29,27 @@ public class Aspects {
     public void getEventByName() {
     }
 
-    @After("getTicketPrice()")
-    public void counterTicketPriceCalling() {
+    @After("getTicketsPrice()")
+    public void counterTicketPriceCalling(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        String eventName = ((Event) args[0]).getName();
         System.out.println("getTicketsPrice() called");
     }
 
     @After("getEventByName() && args(eventName,..)")
     public void countEventCallingByName(String eventName) {
-        Map<String, Integer> eventNameAndCallingAmount = store.getCountEventCallByName();
+        Map<String, Counter> eventNameAndCallingAmount = store.getCountEventCallByName();
 
         if (eventNameAndCallingAmount.containsKey(eventName)) {
-            eventNameAndCallingAmount.put(eventName, eventNameAndCallingAmount.get(eventName) + 1);
+            Counter existedCounter = eventNameAndCallingAmount.get(eventName);
+            int newCount = existedCounter.getEventCalledByNameCount() + 1;
+            existedCounter.setEventCalledByNameCount(newCount);
+            eventNameAndCallingAmount.put(eventName, existedCounter);
             return;
         }
-        eventNameAndCallingAmount.put(eventName, 1);
+        Counter counter = new Counter();
+        counter.setEventCalledByNameCount(1);
+        eventNameAndCallingAmount.put(eventName, counter);
 
     }
 }

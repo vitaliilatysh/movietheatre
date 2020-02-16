@@ -137,7 +137,7 @@ public class EventServiceImplTest extends BaseTest {
         eventService.getByName(event3.getName());
 
 
-        assertEquals(2, (int) store.getCountEventCallByName().get(event1.getName()));
-        assertEquals(3, (int) store.getCountEventCallByName().get(event3.getName()));
+        assertEquals(2, store.getCountEventCallByName().get(event1.getName()).getEventCalledByNameCount());
+        assertEquals(3, store.getCountEventCallByName().get(event3.getName()).getEventCalledByNameCount());
     }
 }

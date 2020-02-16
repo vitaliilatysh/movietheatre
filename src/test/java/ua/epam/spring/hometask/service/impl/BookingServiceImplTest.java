@@ -119,4 +119,9 @@ public class BookingServiceImplTest extends BaseTest {
         bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
         assertEquals(2, bookingService.getPurchasedTicketsForEvent(event1, airDateTime1).size());
     }
+
+    @Test
+    public void shouldReturnHowManyTimesEventPricesWereQueried() {
+
+    }
 }

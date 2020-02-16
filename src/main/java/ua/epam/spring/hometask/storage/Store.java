@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class Store {
-    private Map<String, Integer> countEventCallByName = new HashMap<>();
+    private Map<String, Counter> eventCounter = new HashMap<>();
     private Map<String, User> userMap = new HashMap<>();
     private Map<String, Ticket> ticketMap = new HashMap<>();
     private Map<String, Event> eventMap = new HashMap<>();
@@ -33,7 +33,7 @@ public class Store {
         return eventMap;
     }
 
-    public Map<String, Integer> getCountEventCallByName() {
-        return countEventCallByName;
+    public Map<String, Counter> getCountEventCallByName() {
+        return eventCounter;
     }
 }
