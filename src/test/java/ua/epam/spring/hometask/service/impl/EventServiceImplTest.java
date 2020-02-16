@@ -52,6 +52,7 @@ public class EventServiceImplTest extends BaseTest {
     @After
     public void cleanUp() {
         store.getEventMap().clear();
+        store.getCountEventCallByName().clear();
     }
 
     @Before
@@ -114,5 +115,13 @@ public class EventServiceImplTest extends BaseTest {
     public void shouldReturnAllRegisteredEvent() {
         eventService.save(event2);
         assertEquals(2, eventService.getAll().size());
+    }
+
+    @Test
+    public void shouldReturnCountOfEventCallingByName() {
+        eventService.getByName(event1.getName());
+        eventService.getByName(event1.getName());
+
+        assertEquals(2, (int) store.getCountEventCallByName().get(event1.getName()));
     }
 }
