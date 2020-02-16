@@ -33,7 +33,7 @@ public class Store {
         return eventMap;
     }
 
-    public Map<String, Counter> getCountEventCallByName() {
+    public Map<String, Counter> getEventCounterMap() {
         return eventCounter;
     }
 }

@@ -31,25 +31,36 @@ public class Aspects {
 
     @After("getTicketsPrice()")
     public void counterTicketPriceCalling(JoinPoint joinPoint) {
+        Map<String, Counter> eventCounterMap = store.getEventCounterMap();
         Object[] args = joinPoint.getArgs();
         String eventName = ((Event) args[0]).getName();
-        System.out.println("getTicketsPrice() called");
+
+        if (eventCounterMap.containsKey(eventName)) {
+            Counter existedCounter = eventCounterMap.get(eventName);
+            int newCount = existedCounter.getEventPriceCalledCount() + 1;
+            existedCounter.setEventPriceCalledCount(newCount);
+            eventCounterMap.put(eventName, existedCounter);
+            return;
+        }
+        Counter counter = new Counter();
+        counter.setEventPriceCalledCount(1);
+        eventCounterMap.put(eventName, counter);
     }
 
     @After("getEventByName() && args(eventName,..)")
     public void countEventCallingByName(String eventName) {
-        Map<String, Counter> eventNameAndCallingAmount = store.getCountEventCallByName();
+        Map<String, Counter> eventCounterMap = store.getEventCounterMap();
 
-        if (eventNameAndCallingAmount.containsKey(eventName)) {
-            Counter existedCounter = eventNameAndCallingAmount.get(eventName);
+        if (eventCounterMap.containsKey(eventName)) {
+            Counter existedCounter = eventCounterMap.get(eventName);
             int newCount = existedCounter.getEventCalledByNameCount() + 1;
             existedCounter.setEventCalledByNameCount(newCount);
-            eventNameAndCallingAmount.put(eventName, existedCounter);
+            eventCounterMap.put(eventName, existedCounter);
             return;
         }
         Counter counter = new Counter();
         counter.setEventCalledByNameCount(1);
-        eventNameAndCallingAmount.put(eventName, counter);
+        eventCounterMap.put(eventName, counter);
 
     }
 }

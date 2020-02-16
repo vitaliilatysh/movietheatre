@@ -60,7 +60,7 @@ public class EventServiceImplTest extends BaseTest {
     @After
     public void cleanUp() {
         store.getEventMap().clear();
-        store.getCountEventCallByName().clear();
+        store.getEventCounterMap().clear();
     }
 
     @Before
@@ -137,7 +137,7 @@ public class EventServiceImplTest extends BaseTest {
         eventService.getByName(event3.getName());
 
 
-        assertEquals(2, store.getCountEventCallByName().get(event1.getName()).getEventCalledByNameCount());
-        assertEquals(3, store.getCountEventCallByName().get(event3.getName()).getEventCalledByNameCount());
+        assertEquals(2, store.getEventCounterMap().get(event1.getName()).getEventCalledByNameCount());
+        assertEquals(3, store.getEventCounterMap().get(event3.getName()).getEventCalledByNameCount());
     }
 }

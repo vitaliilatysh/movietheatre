@@ -63,22 +63,25 @@ public class BookingServiceImplTest extends BaseTest {
 
         seats = new HashSet<>(Arrays.asList(1L, 2L));
 
-        NavigableMap<LocalDateTime, Auditorium> dateAndEvent = new TreeMap<>();
-        dateAndEvent.put(airDateTime1, auditoriumService.getByName("Kyiv"));
+        NavigableMap<LocalDateTime, Auditorium> dateAndEvent1 = new TreeMap<>();
+        dateAndEvent1.put(airDateTime1, auditoriumService.getByName("Kyiv"));
+
+        NavigableMap<LocalDateTime, Auditorium> dateAndEvent2 = new TreeMap<>();
+        dateAndEvent2.put(airDateTime2, auditoriumService.getByName("Panorama"));
 
         event1 = new Event();
         event1.setName("Knives Out");
         event1.setBasePrice(100);
         event1.setRating(EventRating.MID);
         event1.setAirDates(set);
-        event1.setAuditoriums(dateAndEvent);
+        event1.setAuditoriums(dateAndEvent1);
 
         event2 = new Event();
         event2.setName("Shindler's list");
         event2.setBasePrice(80);
         event2.setRating(EventRating.MID);
-        event2.setAirDates(new TreeSet<>());
-        event2.setAuditoriums(new TreeMap<>());
+        event2.setAirDates(set);
+        event2.setAuditoriums(dateAndEvent2);
 
         seat1 = new Seat();
         seat1.setNumber(1L);
@@ -94,6 +97,7 @@ public class BookingServiceImplTest extends BaseTest {
     @After
     public void cleanUp() {
         store.getEventMap().clear();
+        store.getEventCounterMap().clear();
     }
 
     @Before
@@ -122,6 +126,16 @@ public class BookingServiceImplTest extends BaseTest {
 
     @Test
     public void shouldReturnHowManyTimesEventPricesWereQueried() {
+        bookingService.getTicketsPrice(event1, airDateTime1, user1, seats);
+        bookingService.getTicketsPrice(event1, airDateTime1, user1, seats);
 
+        eventService.save(event2);
+
+        bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
+        bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
+        bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
+
+        assertEquals(2, store.getEventCounterMap().get(event1.getName()).getEventPriceCalledCount());
+        assertEquals(3, store.getEventCounterMap().get(event2.getName()).getEventPriceCalledCount());
     }
 }
