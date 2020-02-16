@@ -1,7 +1,6 @@
 package ua.epam.spring.hometask.aspects;
 
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -33,7 +32,7 @@ public class Aspects {
     }
 
     @After("getEventByName() && args(eventName,..)")
-    public void countEventCallingByName(JoinPoint joinPoint, String eventName) {
+    public void countEventCallingByName(String eventName) {
         Map<String, Integer> eventNameAndCallingAmount = store.getCountEventCallByName();
 
         if (eventNameAndCallingAmount.containsKey(eventName)) {
