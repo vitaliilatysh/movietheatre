@@ -6,11 +6,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.epam.spring.hometask.domain.StrategyType;
 import ua.epam.spring.hometask.storage.Discount;
 import ua.epam.spring.hometask.storage.Store;
 import ua.epam.spring.hometask.strategy.StrategyParams;
-import ua.epam.spring.hometask.strategy.impl.BirthdayStrategy;
-import ua.epam.spring.hometask.strategy.impl.EveryNTicketStrategy;
 
 import java.math.BigDecimal;
 
@@ -36,7 +35,7 @@ public class DiscountAspect {
 
         Discount discount = new Discount();
         discount.setUserId(params.getUser());
-        discount.setTypeDiscount(BirthdayStrategy.class);
+        discount.setTypeDiscount(StrategyType.BIRTDAY);
 
         store.getDiscountList().add(discount);
 
@@ -49,7 +48,7 @@ public class DiscountAspect {
 
         Discount discount = new Discount();
         discount.setUserId(params.getUser());
-        discount.setTypeDiscount(EveryNTicketStrategy.class);
+        discount.setTypeDiscount(StrategyType.NTICKET);
 
         store.getDiscountList().add(discount);
     }

@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import ua.epam.spring.hometask.BaseTest;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.EventRating;
+import ua.epam.spring.hometask.domain.StrategyType;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.DiscountService;
 import ua.epam.spring.hometask.storage.Store;
@@ -181,6 +182,8 @@ public class DiscountServiceImplTest extends BaseTest {
                 9, BigDecimal.valueOf(900));
 
         assertEquals(2, store.getDiscountList().size());
+        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.BIRTDAY)).count());
+        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.NTICKET)).count());
 
     }
 
@@ -220,8 +223,8 @@ public class DiscountServiceImplTest extends BaseTest {
         assertEquals(1, store.getDiscountList().stream()
                 .filter(discount -> discount.getUser().equals(user2))
                 .count());
-
         assertEquals(4, store.getDiscountList().size());
+        assertEquals(3, store.getDiscountList().stream().filter(strategy -> strategy.getTypeDiscount().equals(StrategyType.NTICKET)).count());
 
     }
 }

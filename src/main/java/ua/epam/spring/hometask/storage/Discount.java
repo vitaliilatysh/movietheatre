@@ -1,10 +1,11 @@
 package ua.epam.spring.hometask.storage;
 
+import ua.epam.spring.hometask.domain.StrategyType;
 import ua.epam.spring.hometask.domain.User;
 
 public class Discount {
     private User user;
-    private Class typeDiscount;
+    private StrategyType typeDiscount;
 
     public User getUser() {
         return user;
@@ -14,11 +15,11 @@ public class Discount {
         this.user = user;
     }
 
-    public Class getTypeDiscount() {
+    public StrategyType getTypeDiscount() {
         return typeDiscount;
     }
 
-    public void setTypeDiscount(Class typeDiscount) {
+    public void setTypeDiscount(StrategyType typeDiscount) {
         this.typeDiscount = typeDiscount;
     }
 }
