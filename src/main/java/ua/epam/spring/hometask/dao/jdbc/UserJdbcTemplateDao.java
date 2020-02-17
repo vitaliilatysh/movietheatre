@@ -8,7 +8,6 @@ import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.mapper.UserMapper;
 
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 import java.util.Collection;
 
 /**
@@ -20,9 +19,6 @@ import java.util.Collection;
 public class UserJdbcTemplateDao implements UserDao {
 
     @Autowired
-    private DataSource dataSource;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -32,6 +28,12 @@ public class UserJdbcTemplateDao implements UserDao {
 
     @Override
     public User save(@Nonnull User object) {
+        jdbcTemplate.update("insert into User (firstName, lastName, email, birthDate) values (?,?,?,?)",
+                object.getFirstName(),
+                object.getLastName(),
+                object.getEmail(),
+                object.getBirthDate());
+
         return null;
     }
 
