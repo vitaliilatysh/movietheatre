@@ -9,7 +9,6 @@ import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.service.UserService;
-import ua.epam.spring.hometask.storage.Store;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,7 +21,6 @@ public class UserServiceImplTest extends BaseTest {
     private static UserService userService;
     private static User user1;
     private static User user2;
-    private static Store store;
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
@@ -30,7 +28,6 @@ public class UserServiceImplTest extends BaseTest {
     @BeforeClass
     public static void setUp() {
         userService = context.getBean(UserService.class);
-        store = context.getBean(Store.class);
 
         user1 = new User();
         user1.setFirstName("Daniel");
@@ -47,12 +44,12 @@ public class UserServiceImplTest extends BaseTest {
 
     @After
     public void cleanUp() {
-        store.getUserMap().clear();
+        userService.remove(user1);
     }
 
     @Before
     public void saveUser() {
-        userService.save(user1);
+        user1 = userService.save(user1);
     }
 
     @Test
@@ -77,9 +74,8 @@ public class UserServiceImplTest extends BaseTest {
     @Test
     public void shouldThrowExceptionUserWithSuchEmailAlreadyRegistered() {
         expectedEx.expect(ItemAlreadyExistException.class);
-        expectedEx.expectMessage("User already registered with such email " + user1.getEmail());
+        expectedEx.expectMessage("User already registered");
 
-        userService.save(user1);
         userService.save(user1);
     }
 

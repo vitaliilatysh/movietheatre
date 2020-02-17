@@ -16,7 +16,7 @@ public interface UserService extends AbstractDomainObjectService<User> {
      * @param email Email of the user
      * @return found user or <code>null</code>
      */
-    public @Nullable
+    @Nullable
     User getUserByEmail(@Nonnull String email);
 
 }

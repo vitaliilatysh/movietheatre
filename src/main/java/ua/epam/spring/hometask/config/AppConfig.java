@@ -1,14 +1,13 @@
 package ua.epam.spring.hometask.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
@@ -18,21 +17,32 @@ import javax.sql.DataSource;
 @PropertySource({"file:src/main/resources/auditorium.properties", "file:src/main/resources/db.properties"})
 public class AppConfig {
 
-    @Value("${driverClassName}")
+    @Value("${h2.driverClassName}")
     private String driver;
 
-    @Value("${url}")
+    @Value("${h2.url}")
     private String url;
 
-    @Value("${username}")
+    @Value("${h2.username}")
     private String username;
 
-    @Value("${password}")
+    @Value("${h2.password}")
     private String password;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer() {
+        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+        resourceDatabasePopulator.addScript(new FileSystemResource("src/main/resources/sql/init.sql"));
+
+        DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+        dataSourceInitializer.setDataSource(getDataSource());
+        dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
+        return dataSourceInitializer;
     }
 
     @Bean
