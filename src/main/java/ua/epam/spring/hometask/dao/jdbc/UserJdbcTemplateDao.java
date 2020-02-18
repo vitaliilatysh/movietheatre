@@ -43,15 +43,7 @@ public class UserJdbcTemplateDao implements UserDao {
 
     @Override
     public User save(@Nonnull User object) {
-        String userId = object.getId();
-
-        if (userId != null) {
-            User foundUser = getById(object.getId());
-
-            if (foundUser != null) {
-                throw new ItemAlreadyExistException("User already registered");
-            }
-        }
+        checkUser(object);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -65,6 +57,18 @@ public class UserJdbcTemplateDao implements UserDao {
         }, keyHolder);
 
         return getById(String.valueOf(keyHolder.getKey()));
+    }
+
+    private void checkUser(@Nonnull User object) {
+        String userId = object.getId();
+
+        if (userId != null) {
+            User foundUser = getById(object.getId());
+
+            if (foundUser != null) {
+                throw new ItemAlreadyExistException("User already registered");
+            }
+        }
     }
 
     @Override
