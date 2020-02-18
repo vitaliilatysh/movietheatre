@@ -1,4 +1,4 @@
-package ua.epam.spring.hometask.mapper;
+package ua.epam.spring.hometask.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import ua.epam.spring.hometask.domain.User;

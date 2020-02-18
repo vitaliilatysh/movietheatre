@@ -1,9 +1,6 @@
-package ua.epam.spring.hometask.storage;
+package ua.epam.spring.hometask.domain;
 
-import ua.epam.spring.hometask.domain.StrategyType;
-import ua.epam.spring.hometask.domain.User;
-
-public class Discount {
+public class Discount extends DomainObject {
     private User user;
     private StrategyType typeDiscount;
 

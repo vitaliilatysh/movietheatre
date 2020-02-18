@@ -1,8 +1,6 @@
 package ua.epam.spring.hometask.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.domain.Auditorium;
 import ua.epam.spring.hometask.domain.Seat;
@@ -12,12 +10,14 @@ import ua.epam.spring.hometask.storage.Store;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
-@Repository
 public class AuditoriumDaoImpl implements AuditoriumDao {
 
-    @Autowired
     private Store store;
 
     @Value("#{'${auditorium.name}'.split(',')}")

@@ -1,4 +1,4 @@
-package ua.epam.spring.hometask.storage;
+package ua.epam.spring.hometask.domain;
 
 public class Counter {
 

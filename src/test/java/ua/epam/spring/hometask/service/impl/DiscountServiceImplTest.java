@@ -182,8 +182,8 @@ public class DiscountServiceImplTest extends BaseTest {
                 9, BigDecimal.valueOf(900));
 
         assertEquals(2, store.getDiscountList().size());
-        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.BIRTDAY)).count());
-        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.NTICKET)).count());
+        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.BIRTHDAY)).count());
+        assertEquals(1, store.getDiscountList().stream().filter(discount -> discount.getTypeDiscount().equals(StrategyType.N_TICKET)).count());
 
     }
 
@@ -224,7 +224,7 @@ public class DiscountServiceImplTest extends BaseTest {
                 .filter(discount -> discount.getUser().equals(user2))
                 .count());
         assertEquals(4, store.getDiscountList().size());
-        assertEquals(3, store.getDiscountList().stream().filter(strategy -> strategy.getTypeDiscount().equals(StrategyType.NTICKET)).count());
+        assertEquals(3, store.getDiscountList().stream().filter(strategy -> strategy.getTypeDiscount().equals(StrategyType.N_TICKET)).count());
 
     }
 }

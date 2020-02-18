@@ -13,7 +13,6 @@ import ua.epam.spring.hometask.strategy.impl.EveryNTicketStrategy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -23,20 +22,14 @@ import java.util.Map;
 @Service
 public class DiscountServiceImpl implements DiscountService {
 
+    private Map<Class<?>, DiscountStrategy> strategyMap = new HashMap<>();
+
     @Autowired
-    private List<DiscountStrategy> discountStrategy;
-    private Map<Class, DiscountStrategy> strategyMap = new HashMap<>();
-
-    public DiscountServiceImpl() {
-    }
-
-    @PostConstruct
-    public void init() {
-        discountStrategy.forEach(strategy -> {
-            Class strategyClass = ((Advised) strategy).getTargetSource().getTargetClass();
+    public void setImageLoaders(List<DiscountStrategy> discountStrategies) {
+        discountStrategies.forEach(strategy -> {
+            Class<?> strategyClass = ((Advised) strategy).getTargetSource().getTargetClass();
             strategyMap.put(strategyClass, strategy);
         });
-
     }
 
     @Override
@@ -59,13 +52,5 @@ public class DiscountServiceImpl implements DiscountService {
             return birthDateDiscount;
         }
         return everyNTicketDiscount;
-    }
-
-    public List<DiscountStrategy> getDiscountStrategy() {
-        return discountStrategy;
-    }
-
-    public void setDiscountStrategy(List<DiscountStrategy> discountStrategy) {
-        this.discountStrategy = discountStrategy;
     }
 }

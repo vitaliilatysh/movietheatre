@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnit4.class)
 public class UserServiceImplTest extends BaseTest {
 
+    public static final String DELETE_FROM_USERS = "DELETE FROM Users";
     private static UserService userService;
     private static JdbcTemplate jdbcTemplate;
     private static User user1;
@@ -45,7 +46,7 @@ public class UserServiceImplTest extends BaseTest {
 
     @After
     public void cleanUp() {
-        jdbcTemplate.update("DELETE FROM Users");
+        jdbcTemplate.update(DELETE_FROM_USERS);
     }
 
     @Before

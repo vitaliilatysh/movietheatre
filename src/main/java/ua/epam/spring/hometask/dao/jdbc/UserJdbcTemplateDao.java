@@ -10,7 +10,7 @@ import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
-import ua.epam.spring.hometask.mapper.UserMapper;
+import ua.epam.spring.hometask.mappers.UserMapper;
 
 import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
@@ -27,15 +27,16 @@ public class UserJdbcTemplateDao implements UserDao {
     private static final String DELETE_FROM_USERS_WHERE_ID = "delete from Users where id = ?";
     private static final String SELECT_FROM_USERS_WHERE_ID = "select * from Users where id = ?";
     private static final String INSERT_USER_INTO_USERS = "insert into Users (firstName, lastName, email, birthDate) values (?,?,?,?)";
+    public static final String SELECT_FROM_USERS_WHERE_EMAIL = "select * from Users where email = ?";
+    public static final String SELECT_FROM_USERS = "select * from Users";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public User getUserByEmail(@Nonnull String userEmail) {
-        String sql = "select * from Users where email = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{userEmail}, new UserMapper());
+            return jdbcTemplate.queryForObject(SELECT_FROM_USERS_WHERE_EMAIL, new Object[]{userEmail}, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             throw new ItemNotFoundException("User not found by email" + userEmail);
         }
@@ -59,18 +60,6 @@ public class UserJdbcTemplateDao implements UserDao {
         return getById(String.valueOf(keyHolder.getKey()));
     }
 
-    private void checkUser(@Nonnull User object) {
-        String userId = object.getId();
-
-        if (userId != null) {
-            User foundUser = getById(object.getId());
-
-            if (foundUser != null) {
-                throw new ItemAlreadyExistException("User already registered");
-            }
-        }
-    }
-
     @Override
     public void remove(@Nonnull User object) {
         User foundUser = getById(object.getId());
@@ -89,6 +78,18 @@ public class UserJdbcTemplateDao implements UserDao {
     @Nonnull
     @Override
     public Collection<User> getAll() {
-        return jdbcTemplate.query("select * from Users", new UserMapper());
+        return jdbcTemplate.query(SELECT_FROM_USERS, new UserMapper());
+    }
+
+    private void checkUser(@Nonnull User object) {
+        String userId = object.getId();
+
+        if (userId != null) {
+            User foundUser = getById(object.getId());
+
+            if (foundUser != null) {
+                throw new ItemAlreadyExistException("User already registered");
+            }
+        }
     }
 }

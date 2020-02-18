@@ -20,7 +20,6 @@ public class Seat implements Comparable<Seat> {
         this.number = number;
     }
 
-
     public SeatType getSeatType() {
         return seatType;
     }
