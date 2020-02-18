@@ -3,6 +3,8 @@ package ua.epam.spring.hometask.service.impl;
 import org.springframework.aop.framework.Advised;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.epam.spring.hometask.dao.DiscountDao;
+import ua.epam.spring.hometask.domain.Discount;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.DiscountService;
@@ -15,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,9 @@ import java.util.Map;
 public class DiscountServiceImpl implements DiscountService {
 
     private Map<Class<?>, DiscountStrategy> strategyMap = new HashMap<>();
+
+    @Autowired
+    private DiscountDao discountDao;
 
     @Autowired
     public void setImageLoaders(List<DiscountStrategy> discountStrategies) {
@@ -52,5 +58,32 @@ public class DiscountServiceImpl implements DiscountService {
             return birthDateDiscount;
         }
         return everyNTicketDiscount;
+    }
+
+    @Nullable
+    @Override
+    public Collection<Discount> getByType(@Nonnull String type) {
+        return discountDao.getByType(type);
+    }
+
+    @Override
+    public Discount save(@Nonnull Discount object) {
+        return discountDao.save(object);
+    }
+
+    @Override
+    public void remove(@Nonnull Discount object) {
+        discountDao.remove(object);
+    }
+
+    @Override
+    public Discount getById(@Nonnull String id) {
+        return discountDao.getById(id);
+    }
+
+    @Nonnull
+    @Override
+    public Collection<Discount> getAll() {
+        return discountDao.getAll();
     }
 }

@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnit4.class)
 public class EventServiceImplTest extends BaseTest {
 
-    public static final String DELETE_FROM_EVENTS = "DELETE FROM Events";
     private static EventService eventService;
     private static Event event1, event2, event3;
     private static JdbcTemplate jdbcTemplate;

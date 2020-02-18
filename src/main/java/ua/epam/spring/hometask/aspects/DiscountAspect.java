@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.epam.spring.hometask.domain.Discount;
 import ua.epam.spring.hometask.domain.StrategyType;
-import ua.epam.spring.hometask.storage.Store;
+import ua.epam.spring.hometask.service.DiscountService;
 import ua.epam.spring.hometask.strategy.StrategyParams;
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class DiscountAspect {
 
     @Autowired
-    private Store store;
+    private DiscountService discountService;
 
     @Pointcut("execution(* ua.epam.spring.hometask.strategy.impl.EveryNTicketStrategy.count(..)) && args(params,..)")
     public void getNticketDiscount(StrategyParams params) {
@@ -34,11 +34,10 @@ public class DiscountAspect {
         if (result.equals(BigDecimal.ZERO)) return;
 
         Discount discount = new Discount();
-        discount.setUserId(params.getUser());
+        discount.setUserId(params.getUser().getId());
         discount.setTypeDiscount(StrategyType.BIRTHDAY);
 
-        store.getDiscountList().add(discount);
-
+        discountService.save(discount);
     }
 
     @AfterReturning(pointcut = "getNticketDiscount(params)", returning = "result")
@@ -47,10 +46,10 @@ public class DiscountAspect {
         if (result.equals(BigDecimal.ZERO)) return;
 
         Discount discount = new Discount();
-        discount.setUserId(params.getUser());
+        discount.setUserId(params.getUser().getId());
         discount.setTypeDiscount(StrategyType.N_TICKET);
 
-        store.getDiscountList().add(discount);
+        discountService.save(discount);
     }
 
 }
