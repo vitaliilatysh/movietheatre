@@ -27,8 +27,8 @@ public class UserJdbcTemplateDao implements UserDao {
     private static final String DELETE_FROM_USERS_WHERE_ID = "delete from Users where id = ?";
     private static final String SELECT_FROM_USERS_WHERE_ID = "select * from Users where id = ?";
     private static final String INSERT_USER_INTO_USERS = "insert into Users (firstName, lastName, email, birthDate) values (?,?,?,?)";
-    public static final String SELECT_FROM_USERS_WHERE_EMAIL = "select * from Users where email = ?";
-    public static final String SELECT_FROM_USERS = "select * from Users";
+    private static final String SELECT_FROM_USERS_WHERE_EMAIL = "select * from Users where email = ?";
+    private static final String SELECT_FROM_USERS = "select * from Users";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

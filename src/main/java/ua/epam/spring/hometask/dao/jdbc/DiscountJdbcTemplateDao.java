@@ -23,11 +23,12 @@ import java.util.Collection;
 @Repository
 public class DiscountJdbcTemplateDao implements DiscountDao {
 
-    public static final String SELECT_FROM_DISCOUNTS = "select * from Discounts";
+    private static final String SELECT_FROM_DISCOUNTS = "select * from Discounts";
     private static final String DELETE_FROM_DISCOUNTS_WHERE_ID = "delete from Discounts where id = ?";
     private static final String SELECT_FROM_DISCOUNTS_WHERE_TYPE = "select * from Discounts where type = ?";
     private static final String SELECT_FROM_DISCOUNTS_WHERE_ID = "select * from Discounts where id = ?";
     private static final String INSERT_DISCOUNT_INTO_DISCOUNTS = "insert into Discounts (type, user_id) values (?,?)";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

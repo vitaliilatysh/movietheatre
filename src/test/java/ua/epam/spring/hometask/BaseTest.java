@@ -6,9 +6,9 @@ import ua.epam.spring.hometask.config.AppConfig;
 
 public abstract class BaseTest {
 
-    public static final String DELETE_FROM_EVENTS = "DELETE FROM Events";
-    public static final String DELETE_FROM_USERS = "DELETE FROM Users";
-    public static final String DELETE_FROM_DISCOUNTS = "DELETE FROM Discounts";
+    protected static final String DELETE_FROM_EVENTS = "DELETE FROM Events";
+    protected static final String DELETE_FROM_USERS = "DELETE FROM Users";
+    protected static final String DELETE_FROM_DISCOUNTS = "DELETE FROM Discounts";
 
     protected static ApplicationContext context =
             new AnnotationConfigApplicationContext(AppConfig.class);

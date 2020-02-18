@@ -1,10 +1,6 @@
 package ua.epam.spring.hometask.service.impl;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -125,19 +121,20 @@ public class EventServiceImplTest extends BaseTest {
         assertEquals(2, eventService.getAll().size());
     }
 
-//    @Test
-//    public void shouldReturnHowManyTimesEventCallingByName() {
-//        eventService.save(event3);
-//
-//        eventService.getByName(event1.getName());
-//        eventService.getByName(event1.getName());
-//
-//        eventService.getByName(event3.getName());
-//        eventService.getByName(event3.getName());
-//        eventService.getByName(event3.getName());
-//
-//
+    @Test
+    @Ignore
+    public void shouldReturnHowManyTimesEventCallingByName() {
+        eventService.save(event3);
+
+        eventService.getByName(event1.getName());
+        eventService.getByName(event1.getName());
+
+        eventService.getByName(event3.getName());
+        eventService.getByName(event3.getName());
+        eventService.getByName(event3.getName());
+
+
 //        assertEquals(2, store.getEventCounterMap().get(event1.getName()).getEventCalledByNameCount());
 //        assertEquals(3, store.getEventCounterMap().get(event3.getName()).getEventCalledByNameCount());
-//    }
+    }
 }

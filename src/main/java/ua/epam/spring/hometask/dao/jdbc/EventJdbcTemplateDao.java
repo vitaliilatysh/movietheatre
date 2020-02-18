@@ -24,11 +24,12 @@ import java.util.Collection;
 @Repository
 public class EventJdbcTemplateDao implements EventDao {
 
-    public static final String SELECT_FROM_EVENTS_WHERE_NAME = "select * from Events where name = ?";
-    public static final String SELECT_FROM_EVENTS = "select * from Events";
+    private static final String SELECT_FROM_EVENTS_WHERE_NAME = "select * from Events where name = ?";
+    private static final String SELECT_FROM_EVENTS = "select * from Events";
     private static final String DELETE_FROM_EVENTS_WHERE_ID = "delete from Events where id = ?";
     private static final String INSERT_EVENT_INTO_EVENTS = "insert into Events (name, rating, basePrice) values (?,?,?)";
     private static final String SELECT_FROM_EVENTS_WHERE_ID = "select * from Events where id = ?";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

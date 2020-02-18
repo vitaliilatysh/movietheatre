@@ -46,7 +46,7 @@ public class AuditoriumServiceImplTest extends BaseTest {
     }
 
     @Test
-    public void getByName() {
+    public void shouldReturnAuditoriumByName() {
         assertNotNull(auditoriumService.getByName("Kyiv"));
     }
 }

@@ -11,6 +11,7 @@ public class Seat implements Comparable<Seat> {
     private Long number;
     private SeatType seatType;
     private boolean booked;
+    private String auditoriumId;
 
     public Long getNumber() {
         return number;
@@ -34,13 +35,14 @@ public class Seat implements Comparable<Seat> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Seat seat = (Seat) o;
-        return number == seat.number &&
-                seatType == seat.seatType;
+        return number.equals(seat.number)
+                && seatType == seat.seatType
+                && auditoriumId.equals(seat.auditoriumId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, seatType);
+        return Objects.hash(number, seatType, auditoriumId);
     }
 
     @Override
@@ -64,5 +66,13 @@ public class Seat implements Comparable<Seat> {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public String getAuditoriumId() {
+        return auditoriumId;
+    }
+
+    public void setAuditoriumId(String auditoriumId) {
+        this.auditoriumId = auditoriumId;
     }
 }
