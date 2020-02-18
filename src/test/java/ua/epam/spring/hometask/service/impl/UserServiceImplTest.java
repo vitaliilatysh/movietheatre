@@ -1,9 +1,14 @@
 package ua.epam.spring.hometask.service.impl;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ua.epam.spring.hometask.BaseTest;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
@@ -19,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 public class UserServiceImplTest extends BaseTest {
 
     private static UserService userService;
+    private static JdbcTemplate jdbcTemplate;
     private static User user1;
     private static User user2;
 
@@ -28,12 +34,7 @@ public class UserServiceImplTest extends BaseTest {
     @BeforeClass
     public static void setUp() {
         userService = context.getBean(UserService.class);
-
-        user1 = new User();
-        user1.setFirstName("Daniel");
-        user1.setLastName("Klein");
-        user1.setEmail("d.klein@gmail.com");
-        user1.setBirthDate(LocalDate.of(1980, Month.DECEMBER, 17));
+        jdbcTemplate = context.getBean(JdbcTemplate.class);
 
         user2 = new User();
         user2.setFirstName("Fill");
@@ -44,11 +45,17 @@ public class UserServiceImplTest extends BaseTest {
 
     @After
     public void cleanUp() {
-        userService.remove(user1);
+        jdbcTemplate.update("DELETE FROM Users");
     }
 
     @Before
     public void saveUser() {
+        user1 = new User();
+        user1.setFirstName("Daniel");
+        user1.setLastName("Klein");
+        user1.setEmail("d.klein@gmail.com");
+        user1.setBirthDate(LocalDate.of(1980, Month.DECEMBER, 17));
+
         user1 = userService.save(user1);
     }
 
