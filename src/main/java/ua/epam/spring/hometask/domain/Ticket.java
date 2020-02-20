@@ -16,7 +16,17 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
 
     private String seatId;
 
+    private boolean booked;
+
     public Ticket() {
+    }
+
+    public Ticket(User user, Event event, LocalDateTime airDateTime, Seat seat, boolean booked) {
+        this.userId = user.getId();
+        this.eventId = event.getId();
+        this.airDateTime = airDateTime;
+        this.seatId = String.valueOf(seat.getNumber());
+        this.booked = booked;
     }
 
     public String getUserId() {
@@ -51,40 +61,13 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         this.seatId = seatId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(airDateTime, eventId, seatId);
+
+    public boolean isBooked() {
+        return booked;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Ticket other = (Ticket) obj;
-        if (airDateTime == null) {
-            if (other.airDateTime != null) {
-                return false;
-            }
-        } else if (!airDateTime.equals(other.airDateTime)) {
-            return false;
-        }
-        if (eventId == null) {
-            if (other.eventId != null) {
-                return false;
-            }
-        } else if (!eventId.equals(other.eventId)) {
-            return false;
-        } else if (!userId.equals(other.userId)) {
-            return false;
-        }
-        return seatId.equals(other.seatId);
+    public void setBooked(boolean booked) {
+        this.booked = booked;
     }
 
     @Override
@@ -115,5 +98,22 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
                 ", dateTime=" + airDateTime +
                 ", seat=" + seatId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return booked == ticket.booked &&
+                userId.equals(ticket.userId) &&
+                eventId.equals(ticket.eventId) &&
+                airDateTime.equals(ticket.airDateTime) &&
+                seatId.equals(ticket.seatId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, eventId, airDateTime, seatId, booked);
     }
 }

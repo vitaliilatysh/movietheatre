@@ -47,4 +47,12 @@ public interface BookingService {
     @Nonnull
     Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime);
 
+    /**
+     * Getting all purchased tickets for event on specific air date and time
+     *
+     * @param user User to get tickets for
+     * @return set of all purchased tickets
+     */
+    @Nonnull
+    Set<Ticket> getPurchasedTicketsForUser(@Nonnull User user);
 }

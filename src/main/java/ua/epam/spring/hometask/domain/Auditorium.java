@@ -1,9 +1,7 @@
 package ua.epam.spring.hometask.domain;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @author Yuriy_Tkach
@@ -11,8 +9,6 @@ import java.util.Set;
 public class Auditorium extends DomainObject {
 
     private String name;
-    private Set<Seat> regularSeats = Collections.emptySet();
-    private Set<Seat> vipSeats = Collections.emptySet();
 
     public Auditorium() {
     }
@@ -39,26 +35,6 @@ public class Auditorium extends DomainObject {
         this.name = name;
     }
 
-    public Set<Seat> getRegularSeats() {
-        return regularSeats;
-    }
-
-    public void setRegularSeats(Set<Seat> regularSeats) {
-        this.regularSeats = regularSeats;
-    }
-
-    public Set<Seat> getAllSeats() {
-        regularSeats.addAll(vipSeats);
-        return regularSeats;
-    }
-
-    public Set<Seat> getVipSeats() {
-        return vipSeats;
-    }
-
-    public void setVipSeats(Set<Seat> vipSeats) {
-        this.vipSeats = vipSeats;
-    }
 
     @Override
     public int hashCode() {

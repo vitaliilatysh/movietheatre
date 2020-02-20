@@ -39,7 +39,7 @@ public class CounterAspect {
     public void counterTicketsBookingForEvent(Set<Ticket> tickets) {
         Map<String, Counter> eventCounterMap = store.getEventCounterMap();
 
-        List<String> events = tickets.stream().map(ticket -> ticket.getEventId().getName()).distinct()
+        List<String> events = tickets.stream().map(Ticket::getEventId).distinct()
                 .collect(Collectors.toList());
 
         events.forEach(eventName -> {

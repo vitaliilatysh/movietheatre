@@ -42,4 +42,12 @@ public interface TicketDao extends BaseDao<Ticket> {
      */
     @Nonnull
     Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime);
+
+    /**
+     * Getting all purchased tickets for user on specific air date and time
+     *
+     * @param user User to get tickets for
+     * @return set of all purchased tickets
+     */
+    Set<Ticket> getPurchasedTicketsForUser(@Nonnull User user);
 }

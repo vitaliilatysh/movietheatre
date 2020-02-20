@@ -6,12 +6,11 @@ import java.util.Objects;
  * @author Vitalii Latysh
  * Created: 11.02.2020
  */
-public class Seat implements Comparable<Seat> {
+public class Seat extends DomainObject implements Comparable<Seat> {
 
     private Long number;
     private SeatType seatType;
-    private boolean booked;
-    private String auditoriumId;
+    private int auditoriumId;
 
     public Long getNumber() {
         return number;
@@ -37,7 +36,7 @@ public class Seat implements Comparable<Seat> {
         Seat seat = (Seat) o;
         return number.equals(seat.number)
                 && seatType == seat.seatType
-                && auditoriumId.equals(seat.auditoriumId);
+                && auditoriumId == (seat.auditoriumId);
     }
 
     @Override
@@ -53,26 +52,18 @@ public class Seat implements Comparable<Seat> {
         int result = this.getSeatType().compareTo(another.getSeatType());
 
         if (result == 0) {
-            if (this.getNumber() != another.getNumber()) {
+            if (!this.getNumber().equals(another.getNumber())) {
                 result = 1;
             }
         }
         return result;
     }
 
-    public boolean isBooked() {
-        return booked;
-    }
-
-    public void setBooked(boolean booked) {
-        this.booked = booked;
-    }
-
-    public String getAuditoriumId() {
+    public int getAuditoriumId() {
         return auditoriumId;
     }
 
-    public void setAuditoriumId(String auditoriumId) {
+    public void setAuditoriumId(int auditoriumId) {
         this.auditoriumId = auditoriumId;
     }
 }

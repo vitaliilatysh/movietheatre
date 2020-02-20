@@ -9,7 +9,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.AuditoriumDao;
+import ua.epam.spring.hometask.dao.SeatDao;
 import ua.epam.spring.hometask.domain.Auditorium;
+import ua.epam.spring.hometask.domain.Seat;
 import ua.epam.spring.hometask.domain.SeatType;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.mappers.AuditoriumMapper;
@@ -28,7 +30,6 @@ import java.util.Collection;
 public class AuditoriumJdbcTemplateDao implements AuditoriumDao {
 
     private static final String INSERT_INTO_AUDITORIUMS = "insert into Auditoriums (name) values (?)";
-    private static final String INSERT_INTO_SEATS = "insert into Seats (number, type, booked, auditorium_id) values (?,?,?,?)";
     private static final String SELECT_FROM_AUDITORIUMS = "select * from Auditoriums";
     private static final String SELECT_FROM_AUDITORIUMS_WHERE_NAME = "select * from Auditoriums where name = ?";
 
@@ -44,12 +45,16 @@ public class AuditoriumJdbcTemplateDao implements AuditoriumDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private SeatDao seatDao;
+
     @PostConstruct
     public void init() {
         int index = 0;
         for (String auditoriumName : names) {
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
+
 
             jdbcTemplate.update(connection -> {
                 PreparedStatement statement = connection.prepareStatement(INSERT_INTO_AUDITORIUMS, new String[]{"ID"});
@@ -60,11 +65,19 @@ public class AuditoriumJdbcTemplateDao implements AuditoriumDao {
             Number auditoriumId = keyHolder.getKey();
 
             for (int seatNumber = 1; seatNumber <= Integer.parseInt(seats[index]); seatNumber++) {
-                jdbcTemplate.update(INSERT_INTO_SEATS, seatNumber, SeatType.REGULAR.name(), false, auditoriumId);
+                Seat seat = new Seat();
+                seat.setNumber((long) seatNumber);
+                seat.setSeatType(SeatType.REGULAR);
+                seat.setAuditoriumId(auditoriumId.intValue());
+                seatDao.save(seat);
             }
 
             for (int vipSeatNumber = Integer.parseInt(seats[index]) + 1; vipSeatNumber <= Integer.parseInt(seats[index]) + Integer.parseInt(vipSeats[index]); vipSeatNumber++) {
-                jdbcTemplate.update(INSERT_INTO_SEATS, vipSeatNumber, SeatType.VIP.name(), false, auditoriumId);
+                Seat seat = new Seat();
+                seat.setNumber((long) vipSeatNumber);
+                seat.setSeatType(SeatType.VIP);
+                seat.setAuditoriumId(auditoriumId.intValue());
+                seatDao.save(seat);
             }
 
             index++;

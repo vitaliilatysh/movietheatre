@@ -20,6 +20,7 @@ public class TicketMapper implements RowMapper<Ticket> {
         ticket.setUserId(resultSet.getString("user_id"));
         ticket.setAirDateTime(resultSet.getTimestamp("airDate").toLocalDateTime());
         ticket.setEventId(resultSet.getString("event_id"));
+        ticket.setBooked(resultSet.getBoolean("booked"));
         ticket.setSeatId(resultSet.getString("seat_id"));
         return ticket;
     }

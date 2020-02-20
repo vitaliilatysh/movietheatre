@@ -44,4 +44,10 @@ public class BookingServiceImpl implements BookingService {
     public Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) {
         return ticketDao.getPurchasedTicketsForEvent(event, dateTime);
     }
+
+    @Nonnull
+    @Override
+    public Set<Ticket> getPurchasedTicketsForUser(@Nonnull User user) {
+        return ticketDao.getPurchasedTicketsForUser(user);
+    }
 }
