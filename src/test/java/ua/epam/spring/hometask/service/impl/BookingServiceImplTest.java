@@ -31,7 +31,7 @@ public class BookingServiceImplTest extends BaseTest {
 
     private static Event event1, event2;
     private static LocalDateTime airDateTime1, airDateTime2;
-    private static User user1;
+    private static User user1, user2;
     private static Set<Long> seats;
     private static Seat seat1, seat2;
     private static Ticket ticket1, ticket2, ticket3, ticket4;
@@ -68,6 +68,12 @@ public class BookingServiceImplTest extends BaseTest {
         user1.setEmail("d.klein@gmail.com");
         user1.setBirthDate(LocalDate.of(1980, Month.DECEMBER, 17));
 
+        user2 = new User();
+        user2.setFirstName("Fill");
+        user2.setLastName("Krock");
+        user2.setEmail("f.krock@gmail.com");
+        user2.setBirthDate(LocalDate.of(1985, Month.JANUARY, 5));
+
         event1 = new Event();
         event1.setName("Knives Out");
         event1.setBasePrice(100);
@@ -85,6 +91,10 @@ public class BookingServiceImplTest extends BaseTest {
         userService.save(user1);
         eventService.save(event1);
 
+        user2 = userService.save(user2);
+        event2 = eventService.save(event2);
+
+
         seat1 = new Seat();
         seat1.setNumber(1L);
 
@@ -93,8 +103,8 @@ public class BookingServiceImplTest extends BaseTest {
 
         ticket1 = new Ticket(user1, event1, airDateTime1, seat1, false);
         ticket2 = new Ticket(user1, event1, airDateTime1, seat2, false);
-        ticket3 = new Ticket(user1, event2, airDateTime2, seat1, false);
-        ticket4 = new Ticket(user1, event2, airDateTime2, seat2, false);
+        ticket3 = new Ticket(user2, event2, airDateTime2, seat1, false);
+        ticket4 = new Ticket(user2, event2, airDateTime2, seat2, false);
     }
 
     @After
@@ -117,15 +127,15 @@ public class BookingServiceImplTest extends BaseTest {
 
     @Test
     public void shouldBookTickets() {
-        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
-        assertEquals(2, bookingService.getPurchasedTicketsForUser(user1).size());
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket3, ticket4)));
+        assertEquals(2, bookingService.getPurchasedTicketsForUser(user2).size());
 
     }
 
     @Test
     public void shouldReturnPurchasedTicketsForEvent() {
-        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket1, ticket2)));
-        assertEquals(2, bookingService.getPurchasedTicketsForEvent(event1, airDateTime1).size());
+        bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket3, ticket4)));
+        assertEquals(2, bookingService.getPurchasedTicketsForEvent(event2, airDateTime2).size());
     }
 
     @Test
