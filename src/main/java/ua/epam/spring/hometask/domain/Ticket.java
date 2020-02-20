@@ -8,40 +8,52 @@ import java.util.Objects;
  */
 public class Ticket extends DomainObject implements Comparable<Ticket> {
 
-    private User user;
+    private String userId;
 
-    private Event event;
+    private String eventId;
 
-    private LocalDateTime dateTime;
+    private LocalDateTime airDateTime;
 
-    private Seat seat;
+    private String seatId;
 
-    public Ticket(User user, Event event, LocalDateTime dateTime, Seat seat) {
-        this.user = user;
-        this.event = event;
-        this.dateTime = dateTime;
-        this.seat = seat;
+    public Ticket() {
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public Event getEvent() {
-        return event;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public String getEventId() {
+        return eventId;
     }
 
-    public Seat getSeat() {
-        return seat;
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public LocalDateTime getAirDateTime() {
+        return airDateTime;
+    }
+
+    public void setAirDateTime(LocalDateTime airDateTime) {
+        this.airDateTime = airDateTime;
+    }
+
+    public String getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(String seatId) {
+        this.seatId = seatId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dateTime, event, seat);
+        return Objects.hash(airDateTime, eventId, seatId);
     }
 
     @Override
@@ -56,21 +68,23 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
             return false;
         }
         Ticket other = (Ticket) obj;
-        if (dateTime == null) {
-            if (other.dateTime != null) {
+        if (airDateTime == null) {
+            if (other.airDateTime != null) {
                 return false;
             }
-        } else if (!dateTime.equals(other.dateTime)) {
+        } else if (!airDateTime.equals(other.airDateTime)) {
             return false;
         }
-        if (event == null) {
-            if (other.event != null) {
+        if (eventId == null) {
+            if (other.eventId != null) {
                 return false;
             }
-        } else if (!event.equals(other.event)) {
+        } else if (!eventId.equals(other.eventId)) {
+            return false;
+        } else if (!userId.equals(other.userId)) {
             return false;
         }
-        return seat == other.seat;
+        return seatId.equals(other.seatId);
     }
 
     @Override
@@ -78,13 +92,17 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
         if (other == null) {
             return 1;
         }
-        int result = dateTime.compareTo(other.getDateTime());
+        int result = airDateTime.compareTo(other.getAirDateTime());
 
         if (result == 0) {
-            result = event.getName().compareTo(other.getEvent().getName());
+            result = eventId.compareTo(other.getEventId());
         }
         if (result == 0) {
-            result = seat.compareTo(other.getSeat());
+            result = seatId.compareTo(other.getSeatId());
+        }
+
+        if (result == 0) {
+            result = userId.compareTo(other.getUserId());
         }
         return result;
     }
@@ -92,10 +110,10 @@ public class Ticket extends DomainObject implements Comparable<Ticket> {
     @Override
     public String toString() {
         return "Ticket{" +
-                "user=" + user +
-                ", event=" + event +
-                ", dateTime=" + dateTime +
-                ", seat=" + seat +
+                "user=" + userId +
+                ", event=" + eventId +
+                ", dateTime=" + airDateTime +
+                ", seat=" + seatId +
                 '}';
     }
 }

@@ -59,11 +59,11 @@ public class AuditoriumJdbcTemplateDao implements AuditoriumDao {
 
             Number auditoriumId = keyHolder.getKey();
 
-            for (int seatNumber = 1; seatNumber <= Integer.valueOf(seats[index]); seatNumber++) {
+            for (int seatNumber = 1; seatNumber <= Integer.parseInt(seats[index]); seatNumber++) {
                 jdbcTemplate.update(INSERT_INTO_SEATS, seatNumber, SeatType.REGULAR.name(), false, auditoriumId);
             }
 
-            for (int vipSeatNumber = Integer.valueOf(seats[index]) + 1; vipSeatNumber <= Integer.valueOf(seats[index]) + Integer.valueOf(vipSeats[index]); vipSeatNumber++) {
+            for (int vipSeatNumber = Integer.parseInt(seats[index]) + 1; vipSeatNumber <= Integer.parseInt(seats[index]) + Integer.parseInt(vipSeats[index]); vipSeatNumber++) {
                 jdbcTemplate.update(INSERT_INTO_SEATS, vipSeatNumber, SeatType.VIP.name(), false, auditoriumId);
             }
 

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public interface TicketDao {
+public interface TicketDao extends BaseDao<Ticket> {
 
     /**
      * Getting price when buying all supplied seats for particular event

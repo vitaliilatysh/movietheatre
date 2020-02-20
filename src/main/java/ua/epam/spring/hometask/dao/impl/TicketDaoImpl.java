@@ -3,7 +3,12 @@ package ua.epam.spring.hometask.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.TicketDao;
-import ua.epam.spring.hometask.domain.*;
+import ua.epam.spring.hometask.domain.Auditorium;
+import ua.epam.spring.hometask.domain.Event;
+import ua.epam.spring.hometask.domain.EventRating;
+import ua.epam.spring.hometask.domain.Seat;
+import ua.epam.spring.hometask.domain.Ticket;
+import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
 import ua.epam.spring.hometask.exceptions.TicketAlreadyBookedException;
 import ua.epam.spring.hometask.storage.Store;
@@ -62,7 +67,7 @@ public class TicketDaoImpl implements TicketDao {
 
     @Override
     public void bookTickets(@Nonnull Set<Ticket> tickets) {
-        Optional<Ticket> isAnyTicketBooked = tickets.stream().filter(ticket -> ticket.getSeat().isBooked()).findAny();
+        Optional<Ticket> isAnyTicketBooked = tickets.stream().filter(ticket -> ticket.getSeatId().isBooked()).findAny();
 
         if (isAnyTicketBooked.isPresent()) {
             throw new TicketAlreadyBookedException("Already booked " + isAnyTicketBooked.get().toString());
@@ -77,7 +82,7 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) {
         return store.getTicketMap().values().stream()
-                .filter(ticket -> ticket.getEvent().getId().equals(event.getId()) && ticket.getDateTime().equals(dateTime))
+                .filter(ticket -> ticket.getEventId().getId().equals(event.getId()) && ticket.getAirDateTime().equals(dateTime))
                 .collect(Collectors.toSet());
     }
 }

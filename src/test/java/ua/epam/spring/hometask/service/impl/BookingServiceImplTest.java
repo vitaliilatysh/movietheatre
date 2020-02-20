@@ -1,11 +1,20 @@
 package ua.epam.spring.hometask.service.impl;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import ua.epam.spring.hometask.BaseTest;
-import ua.epam.spring.hometask.domain.*;
+import ua.epam.spring.hometask.domain.Auditorium;
+import ua.epam.spring.hometask.domain.Event;
+import ua.epam.spring.hometask.domain.EventRating;
+import ua.epam.spring.hometask.domain.Seat;
+import ua.epam.spring.hometask.domain.Ticket;
+import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.service.AuditoriumService;
 import ua.epam.spring.hometask.service.BookingService;
 import ua.epam.spring.hometask.service.EventService;
@@ -15,7 +24,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -133,8 +148,8 @@ public class BookingServiceImplTest extends BaseTest {
 
         bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket4)));
 
-        assertEquals(1, store.getEventCounterMap().get(ticket1.getEvent().getName()).getEventTicketsBookedCount());
-        assertEquals(2, store.getEventCounterMap().get(ticket3.getEvent().getName()).getEventTicketsBookedCount());
+        assertEquals(1, store.getEventCounterMap().get(ticket1.getEventId().getName()).getEventTicketsBookedCount());
+        assertEquals(2, store.getEventCounterMap().get(ticket3.getEventId().getName()).getEventTicketsBookedCount());
     }
 
     @Test
