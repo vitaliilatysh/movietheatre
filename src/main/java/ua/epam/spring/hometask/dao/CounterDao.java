@@ -15,5 +15,5 @@ public interface CounterDao extends BaseDao<Counter> {
 
     int getCountByTicketBooked(@Nonnull Event event);
 
-    Counter update(@Nonnull Counter counter, String column);
+    void update(@Nonnull Counter counter, int value, String column);
 }

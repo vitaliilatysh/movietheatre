@@ -55,7 +55,7 @@ public class CounterAspect {
             }
             foundCounter.setEventTicketsBookedCount(foundCounter.getEventTicketsBookedCount() + 1);
             foundCounter.setEvent(event);
-            counterDao.update(foundCounter, "tickets_booked");
+            counterDao.update(foundCounter, foundCounter.getEventTicketsBookedCount(), "tickets_booked");
         }
     }
 
@@ -71,7 +71,7 @@ public class CounterAspect {
         }
         foundCounter.setEventPriceCalledCount(foundCounter.getEventPriceCalledCount() + 1);
         foundCounter.setEvent(event);
-        counterDao.update(foundCounter, "price_called");
+        counterDao.update(foundCounter, foundCounter.getEventPriceCalledCount(), "price_called");
     }
 
     @After("getEventByName() && args(eventName,..)")
@@ -87,6 +87,6 @@ public class CounterAspect {
         }
         foundCounter.setEventCalledByNameCount(foundCounter.getEventCalledByNameCount() + 1);
         foundCounter.setEvent(foundEvent);
-        counterDao.update(foundCounter, "name_called");
+        counterDao.update(foundCounter, foundCounter.getEventCalledByNameCount(), "name_called");
     }
 }

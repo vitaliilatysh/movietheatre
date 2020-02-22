@@ -61,9 +61,8 @@ public class CounterJdbcTemplateDao implements CounterDao {
     }
 
     @Override
-    public Counter update(@Nonnull Counter object, String column) {
-        jdbcTemplate.update(String.format(UPDATE_COUNTER, column), new Object[]{object.getEventTicketsBookedCount(), object.getEvent().getId()}, new int[]{Types.INTEGER, Types.INTEGER});
-        return null;
+    public void update(@Nonnull Counter object, int value, String column) {
+        jdbcTemplate.update(String.format(UPDATE_COUNTER, column), new Object[]{value, object.getEvent().getId()}, new int[]{Types.INTEGER, Types.INTEGER});
     }
 
 
