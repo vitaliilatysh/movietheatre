@@ -3,8 +3,10 @@ package ua.epam.spring.hometask.dao.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -19,7 +21,12 @@ import ua.epam.spring.hometask.mappers.AuditoriumMapper;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Vitalii Latysh
@@ -111,6 +118,25 @@ public class AuditoriumJdbcTemplateDao implements AuditoriumDao {
     @Nonnull
     @Override
     public Collection<Auditorium> getAll() {
-        return jdbcTemplate.query(SELECT_FROM_AUDITORIUMS, new AuditoriumMapper());
+        return jdbcTemplate.query(SELECT_FROM_AUDITORIUMS, new ResultSetExtractor<Collection<Auditorium>>() {
+            @Override
+            public Collection<Auditorium> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                Collection<Auditorium> result = new ArrayList<>();
+                while (resultSet.next()) {
+                    Auditorium auditorium = new Auditorium();
+                    auditorium.setId(resultSet.getString("id"));
+                    auditorium.setName(resultSet.getString("name"));
+
+                    Collection<Seat> seats = seatDao.getByAuditoriumId(auditorium.getId());
+
+                    Set<Seat> regularSeats = seats.stream().filter(seat -> seat.getSeatType().equals(SeatType.REGULAR)).collect(Collectors.toSet());
+                    Set<Seat> vipSeats = seats.stream().filter(seat -> seat.getSeatType().equals(SeatType.VIP)).collect(Collectors.toSet());
+                    auditorium.setRegularSeats(regularSeats);
+                    auditorium.setVipSeats(vipSeats);
+                    result.add(auditorium);
+                }
+                return result;
+            }
+        });
     }
 }

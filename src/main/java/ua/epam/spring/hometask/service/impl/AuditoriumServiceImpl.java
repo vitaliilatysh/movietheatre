@@ -16,9 +16,6 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     @Autowired
     private AuditoriumDao auditoriumDao;
 
-    public AuditoriumServiceImpl() {
-    }
-
     @Nonnull
     @Override
     public Collection<Auditorium> getAll() {

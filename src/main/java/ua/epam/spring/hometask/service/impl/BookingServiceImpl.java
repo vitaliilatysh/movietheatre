@@ -24,9 +24,6 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private DiscountService discountService;
 
-    public BookingServiceImpl() {
-    }
-
     @Override
     public BigDecimal getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user, @Nonnull Set<Long> seats) {
         BigDecimal totalPrice = BigDecimal.valueOf(ticketDao.getTicketsPrice(event, dateTime, user, seats));

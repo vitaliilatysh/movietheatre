@@ -20,6 +20,9 @@ public class BirthdayStrategy implements DiscountStrategy {
 
         LocalDate userBirthDate = params.getUser().getBirthDate();
 
+        if (userBirthDate == null) {
+            return BigDecimal.ZERO;
+        }
         if (diffInDays(userBirthDate, airDateTime) >= 0 && diffInDays(userBirthDate, airDateTime) <= 5) {
             return totalSum.multiply(DISCOUNT);
         }

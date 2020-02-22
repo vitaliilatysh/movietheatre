@@ -9,6 +9,7 @@ public abstract class BaseTest {
     protected static final String DELETE_FROM_EVENTS = "DELETE FROM Events";
     protected static final String DELETE_FROM_USERS = "DELETE FROM Users";
     protected static final String DELETE_FROM_DISCOUNTS = "DELETE FROM Discounts";
+    protected static final String DELETE_FROM_TICKETS = "DELETE FROM Tickets";
 
     protected static ApplicationContext context =
             new AnnotationConfigApplicationContext(AppConfig.class);

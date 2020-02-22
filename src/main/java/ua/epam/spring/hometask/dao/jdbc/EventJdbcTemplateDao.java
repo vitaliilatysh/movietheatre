@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ua.epam.spring.hometask.dao.AirDateDao;
+import ua.epam.spring.hometask.dao.AuditoriumDao;
 import ua.epam.spring.hometask.dao.EventDao;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
@@ -32,6 +34,12 @@ public class EventJdbcTemplateDao implements EventDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private AuditoriumDao auditoriumDao;
+
+    @Autowired
+    private AirDateDao airDateDao;
 
     @Override
     public Event getByName(@Nonnull String eventName) {

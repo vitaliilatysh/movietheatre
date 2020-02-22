@@ -241,10 +241,10 @@ public class DiscountServiceImplTest extends BaseTest {
                 20, BigDecimal.valueOf(2000));
 
         assertEquals(2, discountService.getAll().stream()
-                .filter(discount -> discount.getUserId() != null && discount.getUserId().equals(user1.getId()))
+                .filter(discount -> discount.getUser() != null && discount.getUser().equals(user1))
                 .count());
         assertEquals(1, discountService.getAll().stream()
-                .filter(discount -> discount.getUserId() != null && discount.getUserId().equals(user2.getId()))
+                .filter(discount -> discount.getUser() != null && discount.getUser().equals(user2))
                 .count());
         assertEquals(4, discountService.getAll().size());
         assertEquals(3, Objects.requireNonNull(discountService.getByType(StrategyType.N_TICKET.name())).size());

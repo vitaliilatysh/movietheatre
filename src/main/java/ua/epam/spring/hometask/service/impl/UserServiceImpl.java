@@ -16,9 +16,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    public UserServiceImpl() {
-    }
-
     @Nullable
     @Override
     public User getUserByEmail(@Nonnull String email) {

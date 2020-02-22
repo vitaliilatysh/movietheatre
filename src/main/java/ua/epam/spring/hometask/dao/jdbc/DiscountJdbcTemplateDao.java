@@ -7,12 +7,15 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.DiscountDao;
+import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.Discount;
+import ua.epam.spring.hometask.domain.StrategyType;
+import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
-import ua.epam.spring.hometask.mappers.DiscountMapper;
 
 import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -32,6 +35,9 @@ public class DiscountJdbcTemplateDao implements DiscountDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public void remove(@Nonnull Discount object) {
         Discount foundUser = getById(object.getId());
@@ -45,7 +51,7 @@ public class DiscountJdbcTemplateDao implements DiscountDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(INSERT_DISCOUNT_INTO_DISCOUNTS, new String[]{"ID"});
             statement.setString(1, object.getTypeDiscount().name());
-            statement.setString(2, object.getUserId());
+            statement.setString(2, object.getUser().getId());
             return statement;
         }, keyHolder);
 
@@ -55,7 +61,20 @@ public class DiscountJdbcTemplateDao implements DiscountDao {
     @Override
     public Discount getById(@Nonnull String id) {
         try {
-            return jdbcTemplate.queryForObject(SELECT_FROM_DISCOUNTS_WHERE_ID, new Object[]{id}, new DiscountMapper());
+            return jdbcTemplate.queryForObject(SELECT_FROM_DISCOUNTS_WHERE_ID, new Object[]{id}, (resultSet, rowNum) -> {
+                Discount discount = new Discount();
+                discount.setId(resultSet.getString("id"));
+                discount.setTypeDiscount(StrategyType.valueOf(resultSet.getString("type")));
+
+                String user_id = resultSet.getString("user_id");
+                if (user_id == null) {
+                    discount.setUser(null);
+                    return discount;
+                }
+                User user = userDao.getById(user_id);
+                discount.setUser(user);
+                return discount;
+            });
         } catch (EmptyResultDataAccessException e) {
             throw new ItemNotFoundException("Discount not found by id: " + id);
         }
@@ -64,11 +83,44 @@ public class DiscountJdbcTemplateDao implements DiscountDao {
     @Nonnull
     @Override
     public Collection<Discount> getAll() {
-        return jdbcTemplate.query(SELECT_FROM_DISCOUNTS, new DiscountMapper());
+        return jdbcTemplate.query(SELECT_FROM_DISCOUNTS, resultSet -> {
+            Collection<Discount> result = new ArrayList<>();
+            while (resultSet.next()) {
+                Discount discount = new Discount();
+                discount.setId(resultSet.getString("id"));
+                discount.setTypeDiscount(StrategyType.valueOf(resultSet.getString("type")));
+
+                String user_id = resultSet.getString("user_id");
+                if (user_id == null) {
+                    discount.setUser(null);
+                    result.add(discount);
+                    continue;
+                }
+                User user = userDao.getById(user_id);
+                discount.setUser(user);
+
+                result.add(discount);
+            }
+            return result;
+        });
     }
 
     @Override
     public Collection<Discount> getByType(String type) {
-        return jdbcTemplate.query(SELECT_FROM_DISCOUNTS_WHERE_TYPE, new Object[]{type}, new DiscountMapper());
+        return jdbcTemplate.query(SELECT_FROM_DISCOUNTS_WHERE_TYPE, new Object[]{type}, (resultSet, rowNum) -> {
+            Discount discount = new Discount();
+            discount.setId(resultSet.getString("id"));
+            discount.setTypeDiscount(StrategyType.valueOf(resultSet.getString("type")));
+
+            String user_id = resultSet.getString("user_id");
+            if (user_id == null) {
+                discount.setUser(null);
+                return discount;
+            }
+            User user = userDao.getById(user_id);
+            discount.setUser(user);
+
+            return discount;
+        });
     }
 }

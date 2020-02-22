@@ -1,4 +1,4 @@
-drop table if exists Users, Events, Discounts, Auditoriums, Seats, Tickets;
+drop table if exists Users, Events, Discounts, Auditoriums, Seats, Tickets, AirDates;
 
 create table Users (
     id              int             auto_increment,
@@ -35,10 +35,17 @@ create table Seats (
     foreign key (auditorium_id) references Auditoriums(id) on delete cascade
 );
 
+create table AirDates (
+    id              int             auto_increment,
+    airDate         timestamp       not null,
+    event_id        int             not null,
+    foreign key (event_id) references Events(id) on delete cascade
+);
+
 create table Tickets (
     id              int             auto_increment,
     user_id         int             not null,
-    airDate         date            not null,
+    airDate         timestamp       not null,
     booked          boolean         not null,
     event_id        int             not null,
     seat_id         int             not null,

@@ -1,15 +1,15 @@
 package ua.epam.spring.hometask.domain;
 
 public class Discount extends DomainObject {
-    private String userId;
+    private User user;
     private StrategyType typeDiscount;
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public StrategyType getTypeDiscount() {

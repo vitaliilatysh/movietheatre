@@ -14,8 +14,8 @@ import ua.epam.spring.hometask.mappers.TicketMapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,6 +36,7 @@ public class TicketJdbcTemplateDao implements TicketDao {
 
     private static final String SELECT_BOOKED_TICKETS = "select * from Tickets where event_id = ? and booked = ? and airDate = ?";
     private static final String SELECT_BOOKED_TICKETS_FOR_USER = "select * from Tickets where user_id = ? and booked = ?";
+    private static final String SELECT_BOOKED_TICKETS_BY_USER_ID = "select * from Tickets where user_id = ?";
     private static final String SELECT_FROM_TICKETS_WHERE_ID = "select * from Tickets where id = ?";
     private static final String INSERT_TICKET_INTO_TICKETS = "insert into Tickets (airDate, user_id, event_id, seat_id, booked) values (?,?,?,?,?)";
 
@@ -66,7 +67,7 @@ public class TicketJdbcTemplateDao implements TicketDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(INSERT_TICKET_INTO_TICKETS, new String[]{"ID"});
-            statement.setDate(1, Date.valueOf(object.getAirDateTime().toLocalDate()));
+            statement.setTimestamp(1, Timestamp.valueOf(object.getAirDateTime()));
             statement.setString(2, object.getUserId());
             statement.setString(3, object.getEventId());
             statement.setString(4, object.getSeatId());
@@ -146,5 +147,10 @@ public class TicketJdbcTemplateDao implements TicketDao {
     public Set<Ticket> getPurchasedTicketsForUser(@Nonnull User user) {
         return new HashSet<>(jdbcTemplate.query(SELECT_BOOKED_TICKETS_FOR_USER, new Object[]{user.getId(), true}, new TicketMapper()));
 
+    }
+
+    @Override
+    public Set<Ticket> getTicketsByUser(@Nonnull User user) {
+        return new HashSet<>(jdbcTemplate.query(SELECT_BOOKED_TICKETS_BY_USER_ID, new Object[]{user.getId()}, new TicketMapper()));
     }
 }

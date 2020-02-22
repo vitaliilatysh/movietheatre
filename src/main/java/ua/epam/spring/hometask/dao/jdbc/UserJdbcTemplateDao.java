@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ua.epam.spring.hometask.dao.TicketDao;
 import ua.epam.spring.hometask.dao.UserDao;
+import ua.epam.spring.hometask.domain.Ticket;
 import ua.epam.spring.hometask.domain.User;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
@@ -15,6 +17,7 @@ import ua.epam.spring.hometask.mappers.UserMapper;
 import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.util.Collection;
+import java.util.TreeSet;
 
 /**
  * @author Vitalii Latysh
@@ -32,6 +35,9 @@ public class UserJdbcTemplateDao implements UserDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private TicketDao ticketDao;
 
     @Override
     public User getUserByEmail(@Nonnull String userEmail) {
@@ -69,7 +75,10 @@ public class UserJdbcTemplateDao implements UserDao {
     @Override
     public User getById(@Nonnull String id) {
         try {
-            return jdbcTemplate.queryForObject(SELECT_FROM_USERS_WHERE_ID, new Object[]{id}, new UserMapper());
+            User user = jdbcTemplate.queryForObject(SELECT_FROM_USERS_WHERE_ID, new Object[]{id}, new UserMapper());
+            Collection<Ticket> tickets = ticketDao.getTicketsByUser(user);
+            user.setTickets(new TreeSet<>(tickets));
+            return user;
         } catch (EmptyResultDataAccessException e) {
             throw new ItemNotFoundException("User not found by id: " + id);
         }

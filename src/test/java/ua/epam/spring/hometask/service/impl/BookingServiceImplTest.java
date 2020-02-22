@@ -78,22 +78,23 @@ public class BookingServiceImplTest extends BaseTest {
         event1.setName("Knives Out");
         event1.setBasePrice(100);
         event1.setRating(EventRating.MID);
-        event1.setAirDates(set);
-        event1.setAuditoriums(dateAndEvent1);
 
         event2 = new Event();
         event2.setName("Shindler's list");
         event2.setBasePrice(80);
         event2.setRating(EventRating.MID);
+
+
+        user1 = userService.save(user1);
+        user2 = userService.save(user2);
+
+        event1 = eventService.save(event1);
+        event1.setAirDates(set);
+        event1.setAuditoriums(dateAndEvent1);
+
+        event2 = eventService.save(event2);
         event2.setAirDates(set);
         event2.setAuditoriums(dateAndEvent2);
-
-        userService.save(user1);
-        eventService.save(event1);
-
-        user2 = userService.save(user2);
-        event2 = eventService.save(event2);
-
 
         seat1 = new Seat();
         seat1.setNumber(1L);
@@ -109,9 +110,7 @@ public class BookingServiceImplTest extends BaseTest {
 
     @After
     public void cleanUp() {
-        jdbcTemplate.update(DELETE_FROM_EVENTS);
-        jdbcTemplate.update(DELETE_FROM_USERS);
-        jdbcTemplate.update(DELETE_FROM_DISCOUNTS);
+        jdbcTemplate.update(DELETE_FROM_TICKETS);
     }
 
     @Before

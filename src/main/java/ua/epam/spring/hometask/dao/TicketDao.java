@@ -50,4 +50,6 @@ public interface TicketDao extends BaseDao<Ticket> {
      * @return set of all purchased tickets
      */
     Set<Ticket> getPurchasedTicketsForUser(@Nonnull User user);
+
+    Set<Ticket> getTicketsByUser(@Nonnull User user);
 }

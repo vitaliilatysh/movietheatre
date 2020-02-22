@@ -16,9 +16,6 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventDao eventDao;
 
-    public EventServiceImpl() {
-    }
-
     @Nullable
     @Override
     public Event getByName(@Nonnull String name) {

@@ -1,10 +1,15 @@
 package ua.epam.spring.hometask.domain;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Yuriy_Tkach
@@ -28,19 +33,17 @@ public class TestAuditorium {
     }
 
     @Test
-    @Ignore
     public void shouldReturnVipSeats() {
         Auditorium a = new Auditorium();
-//        a.setVipSeats(Stream.of(seat1, seat2, seat3).collect(Collectors.toSet()));
-//        assertEquals(1, a.countVipSeats(Arrays.asList(seat1, seat2, seat3)));
+        a.setVipSeats(Stream.of(seat1, seat2, seat3).collect(Collectors.toSet()));
+        assertEquals(1, a.countVipSeats(Arrays.asList(seat1, seat2, seat3)));
     }
 
     @Test
-    @Ignore
     public void shouldReturnAllSeats() {
         Auditorium a = new Auditorium();
-//        a.setRegularSeats(Stream.of(seat1, seat2).collect(Collectors.toSet()));
-//        assertEquals(2, a.getAllSeats().size());
+        a.setRegularSeats(Stream.of(seat1, seat2).collect(Collectors.toSet()));
+        assertEquals(2, a.getAllSeats().size());
     }
 
 }
