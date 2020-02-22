@@ -4,16 +4,27 @@ package ua.epam.spring.hometask.aspects;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.epam.spring.hometask.dao.CounterDao;
+import ua.epam.spring.hometask.dao.EventDao;
+import ua.epam.spring.hometask.domain.Counter;
 import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.Ticket;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Aspect
 @Component
 public class CounterAspect {
 
+    @Autowired
+    private CounterDao counterDao;
+
+    @Autowired
+    private EventDao eventDao;
 
     @Pointcut("execution(* ua.epam.spring.hometask.service.impl.BookingServiceImpl.getTicketsPrice(..)) && args(event,..)")
     public void getTicketsPrice(Event event) {
@@ -29,56 +40,53 @@ public class CounterAspect {
 
     @After("bookTickets(tickets)")
     public void counterTicketsBookingForEvent(Set<Ticket> tickets) {
-////        Map<String, Counter> eventCounterMap = store.getEventCounterMap();
-//
-//        List<String> events = tickets.stream().map(Ticket::getEventId).distinct()
-//                .collect(Collectors.toList());
-//
-//        events.forEach(eventName -> {
-//            if (eventCounterMap.containsKey(eventName)) {
-//                Counter existedCounter = eventCounterMap.get(eventName);
-//                int newCount = existedCounter.getEventTicketsBookedCount() + 1;
-//                existedCounter.setEventTicketsBookedCount(newCount);
-//                eventCounterMap.put(eventName, existedCounter);
-//                return;
-//            }
-//            Counter counter = new Counter();
-//            counter.setEventTicketsBookedCount(1);
-//            eventCounterMap.put(eventName, counter);
-//        });
+        List<String> eventIds = tickets.stream().map(Ticket::getEventId).distinct()
+                .collect(Collectors.toList());
+
+        for (String eventId : eventIds) {
+            Event event = eventDao.getById(eventId);
+            Counter foundCounter = counterDao.getByEvent(event);
+            if (foundCounter == null) {
+                Counter counter = new Counter();
+                counter.setEventTicketsBookedCount(1);
+                counter.setEvent(event);
+                counterDao.save(counter);
+                continue;
+            }
+            foundCounter.setEventTicketsBookedCount(foundCounter.getEventTicketsBookedCount() + 1);
+            foundCounter.setEvent(event);
+            counterDao.update(foundCounter, "tickets_booked");
+        }
     }
 
     @After("getTicketsPrice(event)")
     public void counterTicketPriceCalling(Event event) {
-//        Map<String, Counter> eventCounterMap = store.getEventCounterMap();
-//        String eventName = event.getName();
-//
-//        if (eventCounterMap.containsKey(eventName)) {
-//            Counter existedCounter = eventCounterMap.get(eventName);
-//            int newCount = existedCounter.getEventPriceCalledCount() + 1;
-//            existedCounter.setEventPriceCalledCount(newCount);
-//            eventCounterMap.put(eventName, existedCounter);
-//            return;
-//        }
-//        Counter counter = new Counter();
-//        counter.setEventPriceCalledCount(1);
-//        eventCounterMap.put(eventName, counter);
+        Counter foundCounter = counterDao.getByEvent(event);
+        if (foundCounter == null) {
+            Counter counter = new Counter();
+            counter.setEventPriceCalledCount(1);
+            counter.setEvent(event);
+            counterDao.save(counter);
+            return;
+        }
+        foundCounter.setEventPriceCalledCount(foundCounter.getEventPriceCalledCount() + 1);
+        foundCounter.setEvent(event);
+        counterDao.update(foundCounter, "price_called");
     }
 
     @After("getEventByName() && args(eventName,..)")
     public void countEventCallingByName(String eventName) {
-//        Map<String, Counter> eventCounterMap = store.getEventCounterMap();
-//
-//        if (eventCounterMap.containsKey(eventName)) {
-//            Counter existedCounter = eventCounterMap.get(eventName);
-//            int newCount = existedCounter.getEventCalledByNameCount() + 1;
-//            existedCounter.setEventCalledByNameCount(newCount);
-//            eventCounterMap.put(eventName, existedCounter);
-//            return;
-//        }
-//        Counter counter = new Counter();
-//        counter.setEventCalledByNameCount(1);
-//        eventCounterMap.put(eventName, counter);
-
+        Event foundEvent = eventDao.getByName(eventName);
+        Counter foundCounter = counterDao.getByEvent(foundEvent);
+        if (foundCounter == null) {
+            Counter counter = new Counter();
+            counter.setEventCalledByNameCount(1);
+            counter.setEvent(foundEvent);
+            counterDao.save(counter);
+            return;
+        }
+        foundCounter.setEventCalledByNameCount(foundCounter.getEventCalledByNameCount() + 1);
+        foundCounter.setEvent(foundEvent);
+        counterDao.update(foundCounter, "name_called");
     }
 }

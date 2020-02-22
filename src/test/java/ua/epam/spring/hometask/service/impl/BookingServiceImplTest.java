@@ -1,16 +1,16 @@
 package ua.epam.spring.hometask.service.impl;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ua.epam.spring.hometask.BaseTest;
 import ua.epam.spring.hometask.domain.*;
-import ua.epam.spring.hometask.service.AuditoriumService;
-import ua.epam.spring.hometask.service.BookingService;
-import ua.epam.spring.hometask.service.EventService;
-import ua.epam.spring.hometask.service.UserService;
+import ua.epam.spring.hometask.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +27,7 @@ public class BookingServiceImplTest extends BaseTest {
     private static EventService eventService;
     private static UserService userService;
     private static AuditoriumService auditoriumService;
+    private static CounterService counterService;
     private static JdbcTemplate jdbcTemplate;
 
     private static Event event1, event2;
@@ -46,6 +47,7 @@ public class BookingServiceImplTest extends BaseTest {
         bookingService = context.getBean(BookingService.class);
         userService = context.getBean(UserService.class);
         jdbcTemplate = context.getBean(JdbcTemplate.class);
+        counterService = context.getBean(CounterService.class);
 
         airDateTime1 = LocalDateTime.of(2020, Month.DECEMBER, 17, 12, 0);
         airDateTime2 = LocalDateTime.of(2020, Month.DECEMBER, 18, 11, 30);
@@ -111,11 +113,7 @@ public class BookingServiceImplTest extends BaseTest {
     @After
     public void cleanUp() {
         jdbcTemplate.update(DELETE_FROM_TICKETS);
-    }
-
-    @Before
-    public void saveEvent() {
-
+        jdbcTemplate.update(DELETE_FROM_COUNTERS);
     }
 
     @Test
@@ -138,9 +136,7 @@ public class BookingServiceImplTest extends BaseTest {
     }
 
     @Test
-    @Ignore
     public void shouldReturnHowManyTimesTicketsForEventBooked() {
-        eventService.save(event2);
         bookingService.bookTickets(new HashSet<>(Arrays.asList(
                 ticket1,
                 ticket2,
@@ -148,23 +144,20 @@ public class BookingServiceImplTest extends BaseTest {
 
         bookingService.bookTickets(new HashSet<>(Arrays.asList(ticket4)));
 
-//        assertEquals(1, store.getEventCounterMap().get(ticket1.getEventId().getName()).getEventTicketsBookedCount());
-//        assertEquals(2, store.getEventCounterMap().get(ticket3.getEventId().getName()).getEventTicketsBookedCount());
+        assertEquals(1, counterService.getCountByTicketBooked(event1));
+        assertEquals(2, counterService.getCountByTicketBooked(event2));
     }
 
     @Test
-    @Ignore
     public void shouldReturnHowManyTimesEventPricesWereQueried() {
         bookingService.getTicketsPrice(event1, airDateTime1, user1, seats);
         bookingService.getTicketsPrice(event1, airDateTime1, user1, seats);
 
-        eventService.save(event2);
-
         bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
         bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
         bookingService.getTicketsPrice(event2, airDateTime2, user1, seats);
 
-//        assertEquals(2, store.getEventCounterMap().get(event1.getName()).getEventPriceCalledCount());
-//        assertEquals(3, store.getEventCounterMap().get(event2.getName()).getEventPriceCalledCount());
+        assertEquals(2, counterService.getCountByPrice(event1));
+        assertEquals(3, counterService.getCountByPrice(event2));
     }
 }

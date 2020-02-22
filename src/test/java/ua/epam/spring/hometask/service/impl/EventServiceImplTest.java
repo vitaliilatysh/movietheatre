@@ -10,6 +10,7 @@ import ua.epam.spring.hometask.domain.Event;
 import ua.epam.spring.hometask.domain.EventRating;
 import ua.epam.spring.hometask.exceptions.ItemAlreadyExistException;
 import ua.epam.spring.hometask.exceptions.ItemNotFoundException;
+import ua.epam.spring.hometask.service.CounterService;
 import ua.epam.spring.hometask.service.EventService;
 
 import java.util.TreeMap;
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class EventServiceImplTest extends BaseTest {
 
     private static EventService eventService;
+    private static CounterService counterService;
     private static Event event1, event2, event3;
     private static JdbcTemplate jdbcTemplate;
 
@@ -31,6 +33,7 @@ public class EventServiceImplTest extends BaseTest {
     public static void setUp() {
         eventService = context.getBean(EventService.class);
         jdbcTemplate = context.getBean(JdbcTemplate.class);
+        counterService = context.getBean(CounterService.class);
 
         event2 = new Event();
         event2.setName("Shindler's list");
@@ -122,9 +125,8 @@ public class EventServiceImplTest extends BaseTest {
     }
 
     @Test
-    @Ignore
     public void shouldReturnHowManyTimesEventCallingByName() {
-        eventService.save(event3);
+        event3 = eventService.save(event3);
 
         eventService.getByName(event1.getName());
         eventService.getByName(event1.getName());
@@ -134,7 +136,7 @@ public class EventServiceImplTest extends BaseTest {
         eventService.getByName(event3.getName());
 
 
-//        assertEquals(2, store.getEventCounterMap().get(event1.getName()).getEventCalledByNameCount());
-//        assertEquals(3, store.getEventCounterMap().get(event3.getName()).getEventCalledByNameCount());
+        assertEquals(2, counterService.getCountByEventName(event1));
+        assertEquals(3, counterService.getCountByEventName(event3));
     }
 }
